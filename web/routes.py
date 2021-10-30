@@ -27,6 +27,7 @@ def about():
 def dashboard():
     return render_template('dashboard.html')
 
+
 @routes.route("/games", methods=['POST', 'GET'])
 def games():
     return render_template('games.html')

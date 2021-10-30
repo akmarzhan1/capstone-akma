@@ -687,8 +687,9 @@ body {
   fill: #fff;
 }
 .intro--banner img {
-  position: relative;
-  bottom: 350px;
+  position: absolute;
+  bottom: 21px;
+  height:500px;
   right: -12px;
   animation-name: floating;
   animation-duration: 3s;
@@ -739,7 +740,7 @@ body {
     font-size: 55px;
   }
   .intro--banner img {
-    width: 430px;
+    height:400px;
   }
   .intro--options > a {
     margin-right: 30px;
@@ -756,7 +757,7 @@ body {
     font-size: 44px;
   }
   .intro--banner img {
-    width: 330px;
+    height:300px;
   }
   .intro--options {
     display: block;
