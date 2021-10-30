@@ -6,6 +6,17 @@ Welcome to my Capstone! You have two options to access this project: through Her
 
 The link to the Heroku website: https://capstone-akma.herokuapp.com/about 
 
+
+## IMPORTANT NOTICE
+
+Some things that are not yet included due to the time limit, but which I am planning to include:
+
+- [x] responsive images and timer (it only works for a zoomed out screen for now)
+- [x] to-do tasks integration with flask 
+- [x] addition of timer feature inside todo tasks 
+- [x] larger game selection 
+- [x] settings page integration 
+
 ## Run Virtual Environment
 
 Virtual environment is a key component in ensuring that the application is configured in the right environment
