@@ -687,8 +687,8 @@ body {
   fill: #fff;
 }
 .intro--banner img {
-  position: absolute;
-  bottom: 21px;
+  position: relative;
+  bottom: 350px;
   right: -12px;
   animation-name: floating;
   animation-duration: 3s;
