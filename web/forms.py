@@ -1,7 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms.fields.html5 import DateField, IntegerField
 from wtforms.validators import DataRequired, InputRequired, Regexp, Length, Email, EqualTo, ValidationError
 from web.models import User
+from flask_admin.form import DateTimePickerWidget
+
 
 # registration form
 class RegistrationForm(FlaskForm):
@@ -30,6 +33,18 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+class AddTasksForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(min=2, max=15)])
+    description = StringField('Description', validators=[DataRequired(), Length(min=2, max=60)])
+    deadline = DateField('DatePicker', format='%Y-%m-%d', validators=[DataRequired()])
+    submit = SubmitField('Add tasks')
+
+class AddTimerForm(FlaskForm):
+    focus = IntegerField('Focus', validators=[DataRequired(), Length(min=1, max=3)])
+    rest = IntegerField('Rest', validators=[DataRequired(), Length(min=1, max=2)])
+    submit = SubmitField('Start timer')
+
 
 # reset form
 class ResetForm(FlaskForm):

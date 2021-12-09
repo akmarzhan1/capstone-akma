@@ -1,27 +1,7 @@
 <head>
     <title>TimeX | Home</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
-        .neon {
-            color: #fff;
-            text-shadow:
-                0 0 5px #fff,
-                0 0 10px #fff,
-                0 0 25px blue,
-                0 0 30px blue,
-                0 0 40px blue,
-                0 0 50px blue;
-            }
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 
-
-
-        @keyframes floating {
-            from { transform: translate(0,  0px); }
-            65%  { transform: translate(0, 15px); }
-            to   { transform: translate(0, -0px); }    
-            }
-
-    </style>
 </head>
 
 {% extends "_header.html" %} {% block content %}
@@ -30,7 +10,10 @@
     <nav class="l-side-nav">
         <ul class="side-nav">
           <li class="is-active"><span>Home</span></li>
-          <li><span>Features</span></li>
+          <li><span>About</span></li>
+          <li><span>Plans</span></li>
+          <li><span>Reviews</span></li>
+
         </ul>
       </nav>
       <ul class="l-main-content main-content">
@@ -107,55 +90,79 @@
         </li>
 
 
+        <li class="l-section section"> 
+           
+          <div class="work">
+            <div class="row">
+              <div class="col-md-6">
+            <div class="site">
+              <h1 class="site__title">Fast paced way to grow</h1>
+              <h2 class="site__subtitle">Manage your time like a boss</h2>
+              <img class="site__img" src="{{ url_for('static', filename='img/homepage.png') }}">
+            </div>
+            </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="l-section section">
+
+            <div class="sect sect--padding-bottom">
+            <div class="row row--center">
+              <h1 class="row__title">
+                Pricing
+              </h1>
+              <h2 class="row__sub">What fits you the best?</h2>
+            </div>
+            <br>
+            <div style="display:flexbox">
+  
+              <!-- second -->
+              <div class="price-box price-box--violet">
+              <div class="price-box__wrap">
+                  <div class="price-box__img"></div>
+                  <h1 style="color:grey;" class="price-box__title">
+                    The Only Plan
+                  </h1>
+                  <h2 style="color: #6f79ff;" class="price-box__discount">
+                  <span class="price-box__dollar">$</span>0<span class="price-box__discount--light">/mo</span>
+                  </h2>
+                  <p style="color:grey;" class="price-box__feat">
+                    Features
+                  </p>
+                  <ul class="price-box__list" style="text-align: center;">
+                    <li class="price-box__list-el">Add Tasks</li>
+                    <li class="price-box__list-el">Set timers</li>
+                    <li class="price-box__list-el">Track progress</li>
+                    <li class="price-box__list-el">Recommendations</li>
+                  </ul>
+                  <div class="price-box__btn">
+                  <a style="text-decoration: none" href="{{ url_for('auth.register')}}" class="btn btn--violet btn--width">Start now</a>
+                </div>
+              </div>
+              </div>
+
+
+            </div>
+            </div>
+
+        </li>
         <li class="l-section section">
           <div class="work">
-            <h2>Features</h2>
-            <div class="work--lockup">
-              <ul class="slider">
-                <li class="slider--item slider--item-left">
-                  <a href="#0">
-                    <div class="slider--item-image">
-                      <img src="{{ url_for('static', filename='img/work-victory.jpg') }}" alt="Focus time">
-                    </div>
-                    <p class="slider--item-title">Focus time</p>
-                    <p class="slider--item-description">Track focused time and set your own standards. </p>
-                  </a>
-                </li>
-                <li class="slider--item slider--item-center">
-                  <a href="#0">
-                    <div class="slider--item-image">
-                      <img src="{{ url_for('static', filename='img/work-metiew-smith.jpg') }}" alt="Visualizations">
-                    </div>
-                    <p class="slider--item-title">Data Visualizations</p>
-                    <p class="slider--item-description">See your progress report throughout the weeks.</p>
-                  </a>
-                </li>
-                <li class="slider--item slider--item-right">
-                  <a href="#0">
-                    <div class="slider--item-image">
-                      <img src="{{ url_for('static', filename='img/work-alex-nowak.jpg') }}" alt="Mini-games">
-                    </div>
-                    <p class="slider--item-title">Mini-games</p>
-                    <p class="slider--item-description">Don't worry about the resting time and just play.</p>
-                  </a>
-                </li>
-              </ul>
-              <div class="slider--prev">
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                  <path d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
-                  c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
-                  c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z"/>
-                </g>
-                </svg>
-              </div>
-              <div class="slider--next">
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                  <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"/>
-                </g>
-                </svg>
+            <div class="testimonial-container">
+              <div class="progress-bar"></div>
+              <div class="fas fa-quote-left fa-quote"></div>
+              <div class="fas fa-quote-right fa-quote"></div>
+              <p class="testimonial">
+                A great product - I will be waiting to see it with more features and a more interactive intefrace. Otherwise, the idea and current prototype are amazing!
+
+              </p>
+              <div class="user">
+                <img src="https://scontent.ftxl3-2.fna.fbcdn.net/v/t1.6435-9/106059054_1030004404068622_5694264401216947881_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=174925&_nc_ohc=wNzYSRAU3e0AX_ir9WZ&_nc_oc=AQmy3tDsYLrdLMEF_NCWohbPJ_JKrBzqqS-5RZhNHE0hnfUd-5swz4PppR10AlkHymE&tn=lif5Nm3isBjZ4nQ5&_nc_ht=scontent.ftxl3-2.fna&oh=319225f7bd0b47e325b55e3c3fb7708b&oe=61D7500C" alt="user" class="user-image" />
+                <div class="user-details">
+                  <h4 class="username">Viktoriia Stepanenko</h4>
+                  <p class="role">Business Major</p>
+                </div>
               </div>
             </div>
           </div>
@@ -164,4 +171,44 @@
 
       
 </body>
+
+<script>
+  const testimonialsContainer = document.querySelector(".testimonials-container");
+const testimonial = document.querySelector(".testimonial");
+const userImage = document.querySelector(".user-image");
+const username = document.querySelector(".username");
+const role = document.querySelector(".role");
+
+const testimonials = [
+  {
+    name: "Alma Gashi",
+    position: "Data Science",
+    photo: "https://scontent.ftxl3-1.fna.fbcdn.net/v/t1.6435-9/122788818_4644209215621625_4168702438630990558_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=63iHeA5SDs4AX96mnXd&_nc_oc=AQlt6RuRycL-3dvl3qFS-r_c_SYeHK_4uvSYwNhJYfi3nMqZ56mBHCHCxO1yh09hQHA&_nc_ht=scontent.ftxl3-1.fna&oh=16c9f96166ec70374982d39b318c2a19&oe=61D6E572",
+    text:
+      "The product idea is great! I struggle with time management and I hope this app helps me with structuring work better, would love to see the finished product!"
+  },
+  {
+    name: "Mickey Mouse",
+    position: "Data Entry",
+    photo: "https://scontent.ftxl3-2.fna.fbcdn.net/v/t1.6435-9/49282254_101597770921540_4236816320735215616_n.jpg?_nc_cat=106&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=iEqjaYK8j_YAX8CWQYc&_nc_ht=scontent.ftxl3-2.fna&oh=494ad48838155e01fb990093e2fa2685&oe=61D99045",
+    text:
+      "I wonder what the product would look like when finished. Currently, it needs a bit more development but seems to be a good start!"
+  }
+];
+
+let index = 1;
+
+const updateTestimonial = () => {
+  const { name, position, photo, text } = testimonials[index];
+  testimonial.innerHTML = text;
+  userImage.src = photo;
+  username.innerHTML = name;
+  role.innerHTML = position;
+  index++;
+  if (index > testimonials.length - 1) index = 0;
+};
+
+setInterval(updateTestimonial, 5000);
+
+</script>
 {% endblock content %}

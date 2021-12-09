@@ -1,0 +1,19 @@
+{% extends "_dash.html" %} {% block content %}
+
+<div class="projects-section">
+
+<form action="{{ url_for('routes.add_todo')}}" method="POST">
+<div class="form-left-column">
+
+    <input type="text" name="title" placeholder="Title of the task">
+    <input type="text" name="description" placeholder="Description">
+</div>
+<div class="form-right-column">
+    <input type="date" name="deadline" placeholder="New to-do task here" class="form-content">
+    <input type="submit" name="post" value="+ Add task">
+
+</div>
+</form>
+</div>
+
+{% endblock content %} 

@@ -8,6 +8,7 @@ from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
+# the original database specification for keeping track of the tasks
 # ORM mapping
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -16,30 +17,26 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=True, nullable=False)
     reset_token = db.Column(db.String(1000))
-    analyze_posts = db.Column(db.Boolean, unique=False, default=True)
-    media = db.Column(db.Integer(), default=None)
-    followers = db.Column(db.Integer(), default=None)
-    posts_update = db.Column(db.Integer(), default=None)
-    likes_update = db.Column(db.Integer(), default=None)
-    avg_likes_update = db.Column(db.Integer(), default=None)
-    comments_update = db.Column(db.Integer(), default=None)
-    hasht = db.Column(db.String(300), default=None)
-    count_res = db.Column(db.String(300), default=None)
-    likes_res = db.Column(db.String(300), default=None)
-    comments_res = db.Column(db.String(300), default=None)
-    likes = db.Column(db.String(300), default=None)
-    dates = db.Column(db.String(300), default=None)
-    captions = db.Column(db.String(300), default=None)
-    comments = db.Column(db.String(300), default=None)
-    links = db.Column(db.String(300), default=None)
-    time = db.Column(db.Integer())
+
+    todos = db.relationship('Todo', backref="creator", lazy=True)
+    # timers = db.relationship('Timer', backref="creator", lazy=True)
+
 
     def __repr__(self):
         return "<User(id={}, username={}, email={}".format(self.id, self.username, self.email)
  
- #table for keeping track of categories for each user
-class Category(db.Model):
-    __tablename__ = 'category'
+class Timer(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    focus = db.Column(db.Integer, nullable=False)
+    rest = db.Column(db.Integer, nullable=False)
+    time = db.Column(db.DateTime, nullable=False)
+
+class Todo(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    do = db.Column(db.Boolean, default=False)
+    done = db.Column(db.Boolean, default=False)
+    deadline = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    keyword = db.Column(db.String(80))

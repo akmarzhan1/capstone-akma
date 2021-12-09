@@ -6,13 +6,13 @@
       <polyline points="9 22 9 12 15 12 15 22" />
     </svg>
   </a>
-  <a href="{{url_for('routes.games')}}" class="app-sidebar-link">
+  <a href="{{url_for('routes.window')}}" class="app-sidebar-link">
     <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="feather feather-pie-chart" viewBox="0 0 24 24">
       <defs />
       <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
     </svg>
   </a>
-  <a href="" class="app-sidebar-link">
+  <a href="{{url_for('routes.games')}}" class="app-sidebar-link">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
       <line x1="16" y1="2" x2="16" y2="6" />
@@ -20,7 +20,7 @@
       <line x1="3" y1="10" x2="21" y2="10" />
     </svg>
   </a>
-  <a href="" class="app-sidebar-link">
+  <a href="{{url_for('settings.settings')}}" class="app-sidebar-link">
     <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="feather feather-settings" viewBox="0 0 24 24">
       <defs />
       <circle cx="12" cy="12" r="3" />
@@ -32,21 +32,21 @@
 <div class="projects-section">
   <div class="projects-section-header">
     <p>Tasks</p>
-    <p class="time">December, 12</p>
+    <p class="time">{{ date.strftime('%A, %d %B %Y') }}</p>
   </div>
   <div class="projects-section-line">
     <div class="projects-status">
       <div class="item-status">
-        <span class="status-number">45</span>
-        <span class="status-type">In Progress</span>
+        <span class="status-number">{{todos|count}}</span>
+        <span class="status-type">To-do</span>
       </div>
       <div class="item-status">
-        <span class="status-number">24</span>
-        <span class="status-type">Upcoming</span>
+        <span class="status-number">{{dos|count}}</span>
+        <span class="status-type">Doing</span>
       </div>
       <div class="item-status">
-        <span class="status-number">62</span>
-        <span class="status-type">Total Projects</span>
+        <span class="status-number">{{dones|count}}</span>
+        <span class="status-type">Done </span>
       </div>
     </div>
     <div class="view-actions">
@@ -70,25 +70,74 @@
       </button>
     </div>
   </div>
+  {% include "_alerts.html" %}
+
 
 <div class="project-boxes jsGridView">
+
+    {% for todo in todos|sort(attribute='deadline') %}
     <div class="project-box-wrapper">
-      <div class="project-box" style="background-color: #fee4cb;">
-        <div class="project-box-header">
-          <span>October 31st, 2020</span>
-          <div class="more-wrapper">
-            <button class="project-btn-more">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="12" cy="5" r="1" />
-                <circle cx="12" cy="19" r="1" />
-              </svg>
-            </button>
+      <div class="project-box" style="background-color: #95b8d1;" href="#popup-to">
+
+        <div id="popup1" class="overlay">
+          <div class="popup">
+          
+          <div class="content" style="opacity:1">
+
+
+          </div>
           </div>
         </div>
+
+
+
+
+
+
+        <div class="project-box-header">
+          <span>{{todo.deadline.strftime('%Y-%m-%d')}}</span>
+            <!-- <div class="dropdown">
+              <button class="dropbtn">⋮</button>
+              <div class="dropdown-content">
+                  <a href="{{ url_for('routes.do', todo_id=todo.id) }}" style="color:rgb(10, 83, 200);">Do</a>
+                  <a href="{{ url_for('routes.done', todo_id=todo.id) }}" style="color:rgb(72, 228, 106);">Done</a>
+                  <a href="{{ url_for('routes.delete', todo_id=todo.id) }}"
+                      style="color:rgb(246, 82, 82);">Delete</a>
+              </div>
+          </div> -->
+        <button id="dropdownButton" data-dropdown-toggle="dropdown" class="text-black bg-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center " type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
+          <circle cx="6" cy="2" r="0.5" />
+          <circle cx="6" cy="10" r="0.5" />
+          <circle cx="6" cy="6" r="0.5" />
+        </svg></button>
+
+        <!-- Dropdown menu -->
+        <div id="dropdown" class="hidden bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700">
+            <ul class="py-1" aria-labelledby="dropdownButton">
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.do', todo_id=todo.id) }}">Do</a>
+
+              </li>
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.done', todo_id=todo.id) }}">Done</a>
+
+              </li>
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.delete', todo_id=todo.id) }}">Delete</a>
+              </li>
+            </ul>
+        </div>
+                  
+          
+        </div>
         <div class="project-box-content-header">
-          <p class="box-content-header">Web Designing</p>
-          <p class="box-content-subheader">Prototyping</p>
+          <p class="box-content-header">{{ todo.title }}</p>
+          <p class="box-content-subheader" style="display:inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 10ch;">{{todo.description}}</p>
         </div>
         <div class="box-progress-wrapper">
           <p class="box-progress-header">Progress</p>
@@ -100,174 +149,129 @@
         <div class="project-box-footer">
 
           <div class="days-left" style="color: #ff942e;">
-            2 Days Left
+            To-do
           </div>
         </div>
       </div>
     </div>
+    {% endfor %}
+
+
+    {% for do in dos|sort(attribute='deadline') %}
     <div class="project-box-wrapper">
-      <div class="project-box" style="background-color: #e9e7fd;">
+      <div class="project-box" style="background-color: #ffcaaf;">
         <div class="project-box-header">
-          <span>October 31st, 2020</span>
-          <div class="more-wrapper">
-            <button class="project-btn-more">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="12" cy="5" r="1" />
-                <circle cx="12" cy="19" r="1" />
-              </svg>
-            </button>
-          </div>
+          <span>{{do.deadline.strftime('%Y-%m-%d')}}</span>
+
+
+
+        <button id="dropdownButton1" data-dropdown-toggle="dropdown1" class="text-black bg-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center " type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
+          <circle cx="6" cy="2" r="0.5" />
+          <circle cx="6" cy="10" r="0.5" />
+          <circle cx="6" cy="6" r="0.5" />
+        </svg></button>
+
+        <!-- Dropdown menu -->
+        <div id="dropdown1" class="hidden bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700">
+            <ul class="py-1" aria-labelledby="dropdownButton1">
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.todo', todo_id=do.id) }}">To-do</a>
+
+              </li>
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.done', todo_id=do.id) }}">Done</a>
+
+              </li>
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.delete', todo_id=do.id) }}">Delete</a>
+              </li>
+            </ul>
+
+        </div>
         </div>
         <div class="project-box-content-header">
-          <p class="box-content-header">Capstone</p>
-          <p class="box-content-subheader">Prototyping</p>
+          <p class="box-content-header">{{ do.title }}</p>
+          <p class="box-content-subheader" style="display:inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 10ch;">{{do.description}}</p>
         </div>
         <div class="box-progress-wrapper">
           <p class="box-progress-header">Progress</p>
           <div class="box-progress-bar">
-            <span class="box-progress" style="width: 50%; background-color: #4f3ff0"></span>
+            <span class="box-progress" style="width: 60%; background-color: #ff942e"></span>
           </div>
-          <p class="box-progress-percentage">50%</p>
+          <p class="box-progress-percentage">70%</p>
         </div>
         <div class="project-box-footer">
 
-          <div class="days-left" style="color: #4f3ff0;">
-            2 Days Left
+          <div class="days-left" style="color: #ff942e;">
+            Do
           </div>
         </div>
       </div>
     </div>
-    <div class="project-box-wrapper">
-      <div class="project-box">
-        <div class="project-box-header">
-          <span>October 31st, 2020</span>
-          <div class="more-wrapper">
-            <button class="project-btn-more">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="12" cy="5" r="1" />
-                <circle cx="12" cy="19" r="1" />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div class="project-box-content-header">
-          <p class="box-content-header">Going out in Berlin</p>
-          <p class="box-content-subheader">Prototyping</p>
-        </div>
-        <div class="box-progress-wrapper">
-          <p class="box-progress-header">Progress</p>
-          <div class="box-progress-bar">
-            <span class="box-progress" style="width: 80%; background-color: #096c86"></span>
-          </div>
-          <p class="box-progress-percentage">80%</p>
-        </div>
-        <div class="project-box-footer">
+    {% endfor %}
 
-          <div class="days-left" style="color: #096c86;">
-            2 Days Left
-          </div>
-        </div>
-      </div>
-    </div>
+
+    {% for done in dones|sort(attribute='deadline') %}
     <div class="project-box-wrapper">
-      <div class="project-box" style="background-color: #ffd3e2;">
+      <div class="project-box" style="background-color: #ecd5e3;">
         <div class="project-box-header">
-          <span>October 31st, 2020</span>
-          <div class="more-wrapper">
-            <button class="project-btn-more">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="12" cy="5" r="1" />
-                <circle cx="12" cy="19" r="1" />
-              </svg>
-            </button>
-          </div>
+          <span>{{done.deadline.strftime('%Y-%m-%d')}}</span>
+
+
+        <button id="dropdownButton2" data-dropdown-toggle="dropdown2" class="text-black bg-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center " type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
+          <circle cx="6" cy="2" r="0.5" />
+          <circle cx="6" cy="10" r="0.5" />
+          <circle cx="6" cy="6" r="0.5" />
+        </svg></button>
+
+        <!-- Dropdown menu -->
+        <div id="dropdown2" class="hidden bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700">
+            <ul class="py-1" aria-labelledby="dropdownButton2">
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.todo', todo_id=done.id) }}">To-do</a>
+
+              </li>
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.do', todo_id=done.id) }}">Do</a>
+
+              </li>
+              <li>
+                <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" href="{{ url_for('routes.delete', todo_id=done.id) }}">Delete</a>
+              </li>
+            </ul>
+
+        </div>
         </div>
         <div class="project-box-content-header">
-          <p class="box-content-header">Eating good food</p>
-          <p class="box-content-subheader">Prototyping</p>
+          <p class="box-content-header">{{ done.title }}</p>
+          <p class="box-content-subheader" style="display:inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 10ch;">{{done.description}}</p>
         </div>
         <div class="box-progress-wrapper">
           <p class="box-progress-header">Progress</p>
           <div class="box-progress-bar">
-            <span class="box-progress" style="width: 20%; background-color: #df3670"></span>
+            <span class="box-progress" style="width: 60%; background-color: #ff942e"></span>
           </div>
           <p class="box-progress-percentage">20%</p>
         </div>
         <div class="project-box-footer">
 
-          <div class="days-left" style="color: #df3670;">
-            2 Days Left
+          <div class="days-left" style="color: #ff942e;">
+            Done
           </div>
         </div>
       </div>
     </div>
-    <div class="project-box-wrapper">
-      <div class="project-box" style="background-color: #c8f7dc;">
-        <div class="project-box-header">
-          <span>October 31st, 2020</span>
-          <div class="more-wrapper">
-            <button class="project-btn-more">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="12" cy="5" r="1" />
-                <circle cx="12" cy="19" r="1" />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div class="project-box-content-header">
-          <p class="box-content-header">Working</p>
-          <p class="box-content-subheader">Prototyping</p>
-        </div>
-        <div class="box-progress-wrapper">
-          <p class="box-progress-header">Progress</p>
-          <div class="box-progress-bar">
-            <span class="box-progress" style="width: 60%; background-color: #34c471"></span>
-          </div>
-          <p class="box-progress-percentage">60%</p>
-        </div>
-        <div class="project-box-footer">
-          <div class="days-left" style="color: #34c471;">
-            2 Days Left
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="project-box-wrapper">
-      <div class="project-box" style="background-color: #d5deff;">
-        <div class="project-box-header">
-          <span>October 31st, 2020</span>
-          <div class="more-wrapper">
-            <button class="project-btn-more">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="12" cy="5" r="1" />
-                <circle cx="12" cy="19" r="1" />
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div class="project-box-content-header">
-          <p class="box-content-header">Drawing</p>
-          <p class="box-content-subheader">Prototyping</p>
-        </div>
-        <div class="box-progress-wrapper">
-          <p class="box-progress-header">Progress</p>
-          <div class="box-progress-bar">
-            <span class="box-progress" style="width: 40%; background-color: #4067f9"></span>
-          </div>
-          <p class="box-progress-percentage">40%</p>
-        </div>
-        <div class="project-box-footer">
-          <div class="days-left" style="color: #4067f9;">
-            2 Days Left
-          </div>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </div>
 

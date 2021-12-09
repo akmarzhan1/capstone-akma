@@ -6,8 +6,9 @@ from sqlalchemy import and_, or_, not_
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from flask_login import LoginManager
-from .forms import UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, DeleteAccountForm
+from .forms import AddTimerForm, UpdateUsernameForm, UpdateEmailForm, UpdatePasswordForm, DeleteAccountForm
 from cryptography.fernet import Fernet
+from .forms import AddTasksForm, AddTimerForm
 
 # new application blueprint for routes
 settings_bp = Blueprint('settings', __name__, template_folder='templates')
@@ -22,6 +23,10 @@ def get_forms(request):
 
 @settings_bp.route("/settings", methods=['GET'])
 def settings():
+    
+    form = AddTasksForm(request.form)
+    form1 = AddTimerForm(request.form)
+
     form_update_username, form_update_password, form_update_email, form_delete_account = get_forms(request)
     if current_user and current_user.is_authenticated:
         return render_template(
@@ -29,7 +34,9 @@ def settings():
             form_update_username=form_update_username,
             form_update_password=form_update_password,
             form_update_email=form_update_email,
-            form_delete_account=form_delete_account
+            form_delete_account=form_delete_account,
+            form=form, 
+            form1=form1
         )
     # return user to home if not logged on
     return redirect(url_for('routes.dashboard'))
@@ -37,6 +44,10 @@ def settings():
 @settings_bp.route("/update_username", methods=['POST'])
 def update_username():
     form_update_username, form_update_password, form_update_email, form_delete_account = get_forms(request)
+        
+    form = AddTasksForm(request.form)
+    form1 = AddTimerForm(request.form)
+    
     if current_user and current_user.is_authenticated:
 
         if form_update_username.validate_on_submit():
@@ -53,16 +64,20 @@ def update_username():
                 form_update_username=form_update_username,
                 form_update_password=form_update_password,
                 form_update_email=form_update_email,
-                form_delete_account=form_delete_account
+                form_delete_account=form_delete_account, 
+                form=form,
+                form1=form1
             )
-        return redirect(url_for('settings.settings'))
     # return user to home if not logged on
     return redirect(url_for('settings.settings'))
 
 @settings_bp.route("/update_email", methods=['POST'])
 def update_email():
     form_update_username, form_update_password, form_update_email, form_delete_account = get_forms(request)
-
+    
+    form = AddTasksForm(request.form)
+    form1 = AddTimerForm(request.form)
+    
     if current_user and current_user.is_authenticated:
 
         if form_update_email.validate_on_submit():
@@ -79,14 +94,19 @@ def update_email():
                 form_update_username=form_update_username,
                 form_update_password=form_update_password,
                 form_update_email=form_update_email,
-                form_delete_account=form_delete_account
+                form_delete_account=form_delete_account, 
+                form=form,
+                form1=form1
             )
-        return redirect(url_for('settings.settings'))
     # return user to home if not logged on
     return redirect(url_for('settings.settings'))
 
 @settings_bp.route("/update_password", methods=['POST'])
 def update_password():
+    
+    form = AddTasksForm(request.form)
+    form1 = AddTimerForm(request.form)
+
     form_update_username, form_update_password, form_update_email, form_delete_account = get_forms(request)
     if current_user and current_user.is_authenticated:
 
@@ -105,9 +125,10 @@ def update_password():
                 form_update_username=form_update_username,
                 form_update_password=form_update_password,
                 form_update_email=form_update_email,
-                form_delete_account=form_delete_account
+                form_delete_account=form_delete_account, 
+                form=form, 
+                form1=form1
             )
-        return redirect(url_for('settings.settings'))
     # return user to home if not logged on
     return redirect(url_for('settings.settings'))
 
@@ -116,6 +137,10 @@ def update_password():
 def delete_account():
     form_update_username, form_update_password, form_update_email, form_delete_account = get_forms(request)
     
+    form = AddTasksForm(request.form)
+    form1 = AddTimerForm(request.form)
+
+
     if current_user and current_user.is_authenticated:
         user = User.query.filter_by(id=current_user.id).first()
 
@@ -123,10 +148,10 @@ def delete_account():
             User.query.filter_by(id=current_user.id).delete()
             db.session.commit()
             flash(f'Account Deleted', 'success')
-            return redirect(url_for('routes.dashboard'))
+            return redirect(url_for('routes.dashboard'), form=form, form1=form1)
         else:
             flash(f'Wrong username')
-            return redirect(url_for('settings.settings'))
+            return redirect(url_for('settings.settings'), form=form, form1=form1)
 
     # return user to home if not logged on
-    return redirect(url_for('settings.settings'))
+    return redirect(url_for('settings.settings'), form=form, form1=form1)

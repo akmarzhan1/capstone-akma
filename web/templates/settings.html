@@ -4,79 +4,102 @@
 </head>
 
 {% from "_formhelpers.html" import render_field %}
-{% extends "_header.html" %} {% block content %}
+{% extends "_dash.html" %} {% block content %}
 {{ super() }}
 
-{% include '_side-menu.html' %}
+<div class="app-sidebar">
+  <a href="{{url_for('routes.dashboard')}}" class="app-sidebar-link ">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
+  </a>
+  <a href="{{url_for('routes.window')}}" class="app-sidebar-link">
+    <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="feather feather-pie-chart" viewBox="0 0 24 24">
+      <defs />
+      <path d="M21.21 15.89A10 10 0 118 2.83M22 12A10 10 0 0012 2v10z" />
+    </svg>
+  </a>
+  <a href="{{url_for('routes.games')}}" class="app-sidebar-link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+  </a>
+  <a href="{{url_for('settings.settings')}}" class="app-sidebar-link active">
+    <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="feather feather-settings" viewBox="0 0 24 24">
+      <defs />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
+    </svg>
+  </a>
+</div>
 
-<div class="right_70">
-    <div class="insights">
-        <!--TO DO: leaving the actual functionality for Lucca to implement-->
-        <div class="left_50">
-            <h4 class="green">Hello {{current_user.username}}, welcome back!</h4>
-            <h3>Your Settings</h3>
 
-            <h5 class="black">Instagram account</h5>
-            <p class="black"> Change your Instagram username below.</p>
-            <form style="text-align: center" method=post action="/update_instagram_username">
-                {{ form_update_instagram_username.hidden_tag() }}
-                {{ render_field(form_update_instagram_username.new_instagram_username, placeholder="Instagram Username") }}
-                {% include "_messages.html" %}
-              <p><input class="settings" type=submit value="Update Instagram Username">
-            </form>
+<div class="projects-section">
+  <div class="projects-section-header">
+    <p>Account Settings</p>
 
-            <h5 class="black">Instagram password</h5>
-            <p class="black"> Change your Instagram password below.</p>
-            <form style="text-align: center" method=post action="/update_instagram_password">
-                {{ form_update_instagram_password.hidden_tag() }}
-                {{ render_field(form_update_instagram_password.new_instagram_password, placeholder="Instagram Password") }}
-                {% include "_messages.html" %}
-              <p><input class="settings" type=submit value="Update Instagram Password">
-            </form>
+    </div>
+    {% include "_alerts.html" %}
 
-            <h5 class="black">Email</h5>
-            <p class="black">Change your email address. Just type the new one below.</p>
-            <form style="text-align: center" method=post action="/update_email">
-                {{ form_update_email.hidden_tag() }}
-                {{ render_field(form_update_email.new_email, placeholder="Email") }}
-                {% include "_messages.html" %}
-              <p><input class="settings" type=submit value="Update Email">
-            </form>
+    <div class="row">
+      <div class="box" style="background-color: rgba(0, 181, 208, 1);">
+        <h2>Nickname</h2>
+
+        <div class="col" >
+            <form style="margin-left:-19px;" method=post action="/update_username">
+              {{ form_update_username.hidden_tag() }}
+              {{ render_field(form_update_username.new_username,class="bg-light form-control", placeholder="New Nickname") }}
+              {% include "_messages.html" %}
+              
+            <input class="btn button border width" style="float:right; margin-bottom:10px;margin-right:-6px;border-radius:10px;" type=submit value="Update Username">
+            <!-- <div class="py-3 pb-4 border-bottom"> <button class="btn btn-primary mr-3">Update username</button> </div> -->
+          </form>
+          </div>
         </div>
-        <div class="right_50">
-            <h5 class="black">Username</h5>
-            <p class="black"> Change your username. Just type the new one below.</p>
-            <form style="text-align: center" method=post action="/update_username">
-                {{ form_update_username.hidden_tag() }}
-                {{ render_field(form_update_username.new_username, placeholder="Username") }}
-                {% include "_messages.html" %}
-              <p><input class="settings" type=submit value="Update Username">
-            </form>
+        <div class="box" style="background-color: rgba(252, 192, 77, 1);">
+          <h2>Email</h2>
+  
+          <div class="col"> 
+          <form style="margin-left:-19px;"  method=post action="/update_email">
+            {{ form_update_email.hidden_tag() }}
+            {{ render_field(form_update_email.new_email, class="bg-light form-control", placeholder="New Email") }}
+            {% include "_messages.html" %}
+          <input class="btn button border width" style="float:right; margin-bottom:10px;margin-right:-6px;border-radius:10px;" type=submit value="Update Email">
+        </form>
+        </div>
+      </div>
 
-            <h5 class="black">Password</h5>
-            <p class="black">Change your password below. It should have:
-                <ul class="black">
-                    <li class="black">At least 8 characters - the more character, the better</li>
-                    <li class="black">A mixture of both uppercase and lowercase letters</li>
-                    <li class="black">A mixture of letters and numbers</li>
-                </ul>
-                <form style="text-align: center" method=post action="/update_password">
-                    {{ form_update_password.hidden_tag() }}
-                    {{ render_field(form_update_password.new_password, placeholder="Password") }}
-                    {{ render_field(form_update_password.new_password_confirm, placeholder="Confirm Password") }}
-                    {% include "_messages.html" %}
-                  <p><input class="settings" type=submit value="Update Password">
-                </form>
-            </p>
+      </div>
+      <div class="row" >
+        <div class="box" style="background-color: rgba(123, 107, 206, 1);">
+          <h2>Password</h2>
+  
+        <div class="col"> 
+        <form style="margin-left:-19px;" method=post action="/update_password">
+          {{ form_update_password.hidden_tag() }}
+          {{ render_field(form_update_password.new_password, class="bg-light form-control", placeholder="New Password") }}
+          {% include "_messages.html" %}
+          
+          <input class="btn button border" style="float:right; margin-bottom:10px;margin-right:-6px;border-radius:10px;" type=submit value="Update Password">
+      </form>
+      </div>
+      </div>
 
-            <h5 class="black">Delete your account</h5>
-            <p class="black">This action is irreversible. Once you delete the account, it is gone. Enter your username below and hit delete to proceed.</p>
-            <form style="text-align: center" method=post action="/delete_account">
-                {{ form_delete_account.hidden_tag() }}
-                {{ render_field(form_delete_account.username, placeholder="Username") }}
-                {% include "_messages.html" %}
-              <p><input class="settings" type=submit value="Delete Account">
-            </form>
+      <div class="box" style="background-color: rgba(254, 98, 109, 1);">
+        <h2>Deactivate</h2>
+
+        <div class="col">
+            <form style="margin-left:-19px;" method=post action="/delete_account">
+              {{ form_delete_account.hidden_tag() }}
+              {{ render_field(form_delete_account.username, class="bg-light form-control", placeholder="Type your username") }}
+              {% include "_messages.html" %}
+              <input class="btn danger" style="float:right; margin-bottom:10px;margin-right:-6px;border-radius:10px;"type=submit value="Delete Account">
+          </form>
+        </div>
         </div>
     </div>
 </div>
