@@ -21,7 +21,7 @@ Watch this video to familiarize yourself with the app and its features.
 
 [![Video tutorial](https://res.cloudinary.com/marcomontalbano/image/upload/v1639153288/video_to_markdown/images/google-drive--1xpgPpe7_YenO-bV89TyrH1irMNF0Gu06-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://drive.google.com/file/d/1xpgPpe7_YenO-bV89TyrH1irMNF0Gu06/view?usp=sharing "Video tutorial")
 
-You can also check out the other helpful links in my Notion [here](https://akmarzhan.notion.site/Capstone-5d82dfda87854d789d97c13e08cb5f9e). It has all the documentation and so on. This is the final paper that explains my project. You can find it here.
+You can also check out the other helpful links in my Notion [here](https://akmarzhan.notion.site/Capstone-5d82dfda87854d789d97c13e08cb5f9e). It has all the documentation and so on. This is the final paper that explains my project. You can find it [here](https://drive.google.com/file/d/1zruBliinuT4rVAPfmo9ndoSyDf-stb1B/view?usp=sharing).
 
 ## IMPORTANT NOTICE
 
