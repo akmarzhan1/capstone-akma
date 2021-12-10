@@ -131,6 +131,8 @@
                   
           
         </div>
+
+        <!-- The to-do tasks and descriptions -->
         <div class="project-box-content-header">
           <p class="box-content-header">{{ todo.title }}</p>
           <p class="box-content-subheader" style="display:inline-block;
@@ -157,7 +159,8 @@
     {% endfor %}
 
 
-    {% for do in dos|sort(attribute='deadline') %}
+    <!-- The do tasks in descriptions -->
+    {% for do in dos %}
     <div class="project-box-wrapper">
       <div class="project-box" style="background-color: #ffcaaf;">
         <div class="project-box-header">
@@ -215,8 +218,8 @@
     </div>
     {% endfor %}
 
-
-    {% for done in dones|sort(attribute='deadline') %}
+    <!-- The done tasks descriptions -->
+    {% for done in dones %}
     <div class="project-box-wrapper">
       <div class="project-box" style="background-color: #ecd5e3;">
         <div class="project-box-header">

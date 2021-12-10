@@ -5,11 +5,9 @@ import jwt
 import os
 import re 
 import time 
-from .getdata import getTrends, create_figure
 from sqlalchemy import and_, or_, not_
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
-from .mail import mail
 from flask_login import LoginManager
 from .forms import UpdateUsernameForm, UpdateEmailForm, SupportForm, UpdatePreferences
 from flask_mail import Message
@@ -43,7 +41,7 @@ def dashboard():
         return render_template('dashboard.html', todos=todo, dos=do, dones=done, form=form, form1=form1, date=today)
     return render_template('home.html')
 
-
+# games section
 @routes.route("/games", methods=['POST', 'GET'])
 def games():
     form = AddTasksForm(request.form)
@@ -53,6 +51,7 @@ def games():
 
     return render_template('games.html', form=form, form1=form1, rest=timer.rest)
 
+# window section
 @routes.route("/window", methods=['POST', 'GET'])
 def window():
     form = AddTasksForm(request.form)
@@ -62,6 +61,8 @@ def window():
 
     return render_template('window.html', form=form, form1=form1, focus=timer.focus, rest=timer.rest)
 
+
+# adding the timer
 @routes.route("/add_timer", methods=['POST', 'GET'])
 def add_timer():
 
@@ -77,7 +78,7 @@ def add_timer():
 
     return redirect(url_for('routes.window'))
 
-
+# the blank page redirects to dashboard if logged in
 @routes.route("/", methods=['POST', 'GET'])
 def blank():
     if current_user and current_user.is_authenticated:
@@ -85,37 +86,12 @@ def blank():
     return render_template('home.html')
 
 
-@routes.route("/support", methods=['POST', 'GET'])
-def support():
-    form = SupportForm(request.form)
-
-    if request.method == 'GET':
-        if current_user and current_user.is_authenticated:
-            return render_template('support.html', form=form)
-        return render_template('home.html')
-    elif request.method == 'POST':
-        if form.validate_on_submit():
-            user = User.query.filter_by(id=current_user.id).first()
-            msg = Message(
-            subject=form.topic.data, 
-            sender=user.email, 
-            recipients=[os.getenv('MAIL_USERNAME')]
-            )
-            msg.html = render_template("email_templates/support_email.html", username=user.username, description=form.description.data)
-            mail.send(msg)
-            flash('Thanks for entering in contact with our Support, we will reply soon!', 'success')
-            return redirect(url_for('routes.support'))
-        else:
-            print("Support form errors:", form.errors.items())
-            return render_template('support.html', form=form)
-
-
 @routes.route('/users')
 def users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
-
+# adding tasks
 @routes.route("/add", methods=['POST', 'GET'])
 @login_required
 def add_todo():

@@ -1,15 +1,27 @@
 # Welcome to the Content Suggestion tool
 
-Welcome to my Capstone! You have two options to access this project: through Heroku and by manually downloading and running locally.
+Welcome to my Capstone! You have two options to access this project: through Heroku and by manually downloading and running locally. 
 
 ## Heroku Deployment
 
 The link to the Heroku website: https://capstone-akma.herokuapp.com/about 
 
+You can also use the pre-made user information or create your own account if you want to test the register page:
+
+```{python}
+email: test@user.com
+password: test1234
+```
+
+NOTE THAT THE PREVIOUS USER INFORMATION IS NOT STORED IN THE NEW PROTOTYPE. So, if you signed up previously (before December 10th, your information is not saved and you have to create a new account. Sorry for the inconvenience. 
 
 ## Documentation and Helpful Links
 
+Watch this video to familiarize yourself with the app and its features.
 
+[![Video tutorial](https://res.cloudinary.com/marcomontalbano/image/upload/v1639153288/video_to_markdown/images/google-drive--1xpgPpe7_YenO-bV89TyrH1irMNF0Gu06-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://drive.google.com/file/d/1xpgPpe7_YenO-bV89TyrH1irMNF0Gu06/view?usp=sharing "Video tutorial")
+
+You can also check out the other helpful links in my Notion [here](https://akmarzhan.notion.site/Capstone-5d82dfda87854d789d97c13e08cb5f9e). It has all the documentation and so on. This is the final paper that explains my project. You can find it here.
 
 ## IMPORTANT NOTICE
 
@@ -18,6 +30,7 @@ Some things that are not yet included due to the time limit, but which I am plan
 - [x] coins and shop
 - [x] larger game selection 
 - [x] timer analytics
+- [x] Github/Google login
 
 ## Run Virtual Environment
 

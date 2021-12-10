@@ -7,7 +7,6 @@ from flask_migrate import Migrate
 import datetime
 from .routes import routes
 from .settings_routes import settings_bp
-from .mail import mail
 from .config import config
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
@@ -31,7 +30,6 @@ migrate = Migrate()
 # connecting DB, flask-migrate, login manager, and flask mail to current app
 db.init_app(app)
 migrate.init_app(app, db, render_as_batch=True)
-mail.init_app(app)
 csrf.init_app(app)
 login_manager.init_app(app)
 

@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, flash, request, redirect, url_for, Blueprint, Response
 from .models import User, db, bcrypt
 import json
-from .getdata import getTrends, create_figure
 from sqlalchemy import and_, or_, not_
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
