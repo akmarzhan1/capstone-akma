@@ -77,74 +77,74 @@ def logout():
     logout_user()
     return redirect(url_for('routes.about'))
 
-# @auth.route("/reset", methods=['GET', 'POST'])
-# def reset():
-#     # user requested password reset route
-#     form = ResetForm(request.form)
-#     if request.method == 'GET':
-#         if current_user and current_user.is_authenticated:
-#             return redirect(url_for('routes.dashboard'))
-#         return render_template('reset.html', form=form)
-#     else:
-#         user = User.query.filter_by(email=form.email.data).first()
-#         if user is None:
-#             # showing user that email was sent, so no one can use this page to do user enumeration
-#             flash(f'Email with instructions to reset your password was sent!', 'info')
-#             return redirect(url_for('auth.login'))
-#         # current date and time
-#         now = str(datetime.now())
-#         encoded_jwt = jwt.encode({"email": form.email.data, "datetime": now}, os.getenv('SECRET_KEY'), algorithm="HS256")
+@auth.route("/reset", methods=['GET', 'POST'])
+def reset():
+    # user requested password reset route
+    form = ResetForm(request.form)
+    if request.method == 'GET':
+        if current_user and current_user.is_authenticated:
+            return redirect(url_for('routes.dashboard'))
+        return render_template('reset.html', form=form)
+    else:
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is None:
+            # showing user that email was sent, so no one can use this page to do user enumeration
+            flash(f'Email with instructions to reset your password was sent!', 'info')
+            return redirect(url_for('auth.login'))
+        # current date and time
+        now = str(datetime.now())
+        encoded_jwt = jwt.encode({"email": form.email.data, "datetime": now}, os.getenv('SECRET_KEY'), algorithm="HS256")
 
-#         # saving reset token on DB
-#         user.reset_token = encoded_jwt
-#         db.session.commit()
-#         msg = Message(
-#             subject="Password Reset Request", 
-#             sender="no-reply@suggestme.com", 
-#             recipients=[form.email.data]
-#         )
-#         msg.html = render_template("email_templates/reset_password_email.html", username=user.username, link=request.base_url+"/token/"+encoded_jwt.decode("utf-8"))
-#         mail.send(msg)
-#         flash(f'Email with instructions to reset your password was sent!', 'info')
-#         return redirect(url_for('auth.login'))
+        # saving reset token on DB
+        user.reset_token = encoded_jwt
+        db.session.commit()
+        msg = Message(
+            subject="Password Reset Request", 
+            sender="no-reply@suggestme.com", 
+            recipients=[form.email.data]
+        )
+        msg.html = render_template("email_templates/reset_password_email.html", username=user.username, link=request.base_url+"/token/"+encoded_jwt.decode("utf-8"))
+        # mail.send(msg)
+        flash(f'Email with instructions to reset your password was sent!', 'info')
+        return redirect(url_for('auth.login'))
 
-# @auth.route('/reset/token/<encoded_jwt>', methods=['GET', 'POST'])
-# def reset_token(encoded_jwt):
-#     # user sent new password after requesting password reset
-#     form = ResetPasswordForm(request.form)
-#     if request.method == 'GET':
-#         # you can only access this page if you're logged out
-#         if current_user and current_user.is_authenticated:
-#             return redirect(url_for('auth.login'))
-#         return render_template('new_password.html', form=form)
-#     try:
-#         # get token data
-#         user_data = jwt.decode(encoded_jwt, os.getenv('SECRET_KEY'), algorithms=["HS256"])
-#         user_email = user_data['email']
-#         user_datetime = user_data['datetime']
-#         # convert str to datetime
-#         user_datetime = datetime.strptime(user_datetime, '%Y-%m-%d %H:%M:%S.%f')
+@auth.route('/reset/token/<encoded_jwt>', methods=['GET', 'POST'])
+def reset_token(encoded_jwt):
+    # user sent new password after requesting password reset
+    form = ResetPasswordForm(request.form)
+    if request.method == 'GET':
+        # you can only access this page if you're logged out
+        if current_user and current_user.is_authenticated:
+            return redirect(url_for('auth.login'))
+        return render_template('new_password.html', form=form)
+    try:
+        # get token data
+        user_data = jwt.decode(encoded_jwt, os.getenv('SECRET_KEY'), algorithms=["HS256"])
+        user_email = user_data['email']
+        user_datetime = user_data['datetime']
+        # convert str to datetime
+        user_datetime = datetime.strptime(user_datetime, '%Y-%m-%d %H:%M:%S.%f')
 
-#         # getting user DB data to check if the token is the same
-#         user = User.query.filter_by(email=user_email).first()
-#         # if it's not the same from the DB, the time expired, or we didn't found a user: we have an invalid token
-#         if user is None or user.reset_token != encoded_jwt or not user_datetime + timedelta(hours=1) > datetime.now():
-#             flash('Invalid token')
-#             return redirect(url_for('auth.login'))
-#     except Exception as e:
-#         print(e)
-#         # if there is any exception we return an invalid token as well.
-#         # if we return the same thing for different errors, attackers won't know why they are getting an error.
-#         flash('Invalid token')
-#         return redirect(url_for('auth.login'))
+        # getting user DB data to check if the token is the same
+        user = User.query.filter_by(email=user_email).first()
+        # if it's not the same from the DB, the time expired, or we didn't found a user: we have an invalid token
+        if user is None or user.reset_token != encoded_jwt or not user_datetime + timedelta(hours=1) > datetime.now():
+            flash('Invalid token')
+            return redirect(url_for('auth.login'))
+    except Exception as e:
+        print(e)
+        # if there is any exception we return an invalid token as well.
+        # if we return the same thing for different errors, attackers won't know why they are getting an error.
+        flash('Invalid token')
+        return redirect(url_for('auth.login'))
     
-#     if form.validate_on_submit():
-#         # updating password and cleaning DB token
-#         hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
-#         user.password = hashed_password
-#         user.reset_token = ""
-#         db.session.commit()
-#         flash('Password updated!')
-#         return redirect(url_for('auth.login'))
-#     print("Form errors:", form.errors.items())
-#     return render_template('new_password.html', form=form)
+    if form.validate_on_submit():
+        # updating password and cleaning DB token
+        hashed_password = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+        user.password = hashed_password
+        user.reset_token = ""
+        db.session.commit()
+        flash('Password updated!')
+        return redirect(url_for('auth.login'))
+    print("Form errors:", form.errors.items())
+    return render_template('new_password.html', form=form)
