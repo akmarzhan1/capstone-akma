@@ -6,15 +6,12 @@ Welcome to my Capstone! You have two options to access this project: through Her
 
 The link to the Heroku website: https://capstone-akma.herokuapp.com/about 
 
-You can also use the pre-made user information or create your own account if you want to test the register page:
+Note that the user information collected before December 10th is not maintained, so you would have to create a new account. Sorry for the inconvenience. You can also use the pre-made user information or create your own account if you want to test the register page:
 
 ```{python}
 email: test@user.com
 password: test1234
 ```
-
-NOTE THAT THE PREVIOUS USER INFORMATION IS NOT STORED IN THE NEW PROTOTYPE. So, if you signed up previously (before December 10th, your information is not saved and you have to create a new account. Sorry for the inconvenience. 
-
 ## Documentation and Helpful Links
 
 Watch this video to familiarize yourself with the app and its features.
