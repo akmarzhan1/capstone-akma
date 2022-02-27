@@ -23,7 +23,7 @@ def time_calc(attempted, remaining):
 
     return string
 
-@csrf.exempt
+@csrf.exempt #ajax support
 @timer_bp.route("/reset_round", methods=['GET', 'POST'])
 def reset_round():
     
