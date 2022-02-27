@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
     block = db.Column(db.Boolean, default=True)
     
     tasks = db.relationship('Tasks', backref="creator", lazy=True)
-    tasks = db.relationship('Timer', backref="creator", lazy=True)
+    timers = db.relationship('Timer', backref="creator", lazy=True)
 
     def __repr__(self):
         return "<User(id={}, username={}, email={}".format(self.id, self.username, self.email)
@@ -28,7 +28,7 @@ class User(db.Model, UserMixin):
  # timer table
 class Timer(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     focus_time = db.Column(db.Integer, nullable=False)
     attempted_time = db.Column(db.Integer, nullable=False)
     time_created = db.Column(db.DateTime, nullable=False)
@@ -41,4 +41,4 @@ class Tasks(db.Model, UserMixin):
     doing = db.Column(db.Boolean, default=True)
     time_created = db.Column(db.DateTime, nullable=False)
     time_completed = db.Column(db.DateTime, nullable=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
