@@ -13,13 +13,14 @@ bcrypt = Bcrypt()
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(40), unique=True, nullable=False)
+    username = db.Column(db.String(40), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(80), nullable=False)
     reset_token = db.Column(db.String(1000))
     block = db.Column(db.Boolean, default=True)
-    # tasks = db.relationship('Tasks', backref="creator", lazy=True)
-    # timers = db.relationship('Timer', backref="creator", lazy=True)
+    
+    tasks = db.relationship('Tasks', backref="creator", lazy=True)
+    tasks = db.relationship('Timer', backref="creator", lazy=True)
 
     def __repr__(self):
         return "<User(id={}, username={}, email={}".format(self.id, self.username, self.email)
@@ -40,4 +41,4 @@ class Tasks(db.Model, UserMixin):
     doing = db.Column(db.Boolean, default=True)
     time_created = db.Column(db.DateTime, nullable=False)
     time_completed = db.Column(db.DateTime, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
