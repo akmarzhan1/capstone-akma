@@ -17,26 +17,27 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=True, nullable=False)
     reset_token = db.Column(db.String(1000))
-
-    todos = db.relationship('Todo', backref="creator", lazy=True)
+    block = db.Column(db.Boolean, default=True)
+    # tasks = db.relationship('Tasks', backref="creator", lazy=True)
     # timers = db.relationship('Timer', backref="creator", lazy=True)
-
 
     def __repr__(self):
         return "<User(id={}, username={}, email={}".format(self.id, self.username, self.email)
  
+ # timer table
 class Timer(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
-    focus = db.Column(db.Integer, nullable=False)
-    rest = db.Column(db.Integer, nullable=False)
-    time = db.Column(db.DateTime, nullable=False)
-
-class Todo(db.Model, UserMixin):
+    focus_time = db.Column(db.Integer, nullable=False)
+    attempted_time = db.Column(db.Integer, nullable=False)
+    time_created = db.Column(db.DateTime, nullable=False)
+    completed = db.Column(db.Boolean, default=False)
+    
+# tasks table 
+class Tasks(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    do = db.Column(db.Boolean, default=False)
-    done = db.Column(db.Boolean, default=False)
-    deadline = db.Column(db.DateTime, nullable=False)
+    doing = db.Column(db.Boolean, default=True)
+    time_created = db.Column(db.DateTime, nullable=False)
+    time_completed = db.Column(db.DateTime, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

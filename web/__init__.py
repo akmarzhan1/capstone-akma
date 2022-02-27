@@ -10,10 +10,9 @@ from .settings_routes import settings_bp
 from .config import config
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
+from .timer_routes import csrf, timer_bp
 
 login_manager.login_message_category = "info"
-
-csrf = CSRFProtect()
 
 app = Flask(__name__)
 
@@ -21,6 +20,8 @@ app = Flask(__name__)
 app.register_blueprint(routes)
 app.register_blueprint(auth)
 app.register_blueprint(settings_bp)
+app.register_blueprint(timer_bp)
+
 
 # updating configs 
 app.config.from_object(config[os.getenv('FLASK_ENV')])

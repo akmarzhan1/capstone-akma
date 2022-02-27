@@ -1,0 +1,289 @@
+<head>
+  <title>Tasks </title>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/profile.css') }}"
+  />
+</head>
+
+{% extends "_header.html" %} {% block content %}
+
+<body>
+  <!-- Tooltip for the deep focus mode radio button -->
+  <div
+    id="tooltip"
+    display="none"
+    style="position: absolute; display: none"
+  ></div>
+
+  <nav class="l-side-nav">
+    <ul class="side-nav">
+      <li class="is-active"><span>Profile</span></li>
+    </ul>
+  </nav>
+  <ul class="l-main-content main-content">
+    <li class="l-section section section--is-active">
+      <div class="intro">
+
+        <!-- Adding all the stats containers and graph -->
+        <div class="app-container">
+          <div class="app-main">
+            <div class="chart-row three">
+              <div class="chart-container-wrapper">
+                <div class="chart-container">
+                  <div class="chart-info-wrapper">
+                    <h2 style="color: #00cfde">Total focus time</h2>
+                    <span>{{profile_data['total_focus']}} </span>
+                  </div>
+
+                  <div class="chart-svg" style="text-align: center">
+                    <h2
+                      style="
+                        color: white;
+                        float: right;
+                        font-size: 16px;
+                        line-height: 16px;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                      "
+                    >
+                      <span style="color: #00cfde">Today</span>
+
+                      <br />
+                      <svg
+                        style="margin-top: 10px"
+                        viewBox="0 0 32 32"
+                        width="16px"
+                        height="16px"
+                        fill="none"
+                        stroke="currentcolor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M16 2 L20 12 30 12 22 19 25 30 16 23 7 30 10 19 2 12 12 12 Z"
+                        />
+                      </svg>
+                      {{profile_data['today_focus']}}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container-wrapper">
+                <div class="chart-container">
+                  <div class="chart-info-wrapper">
+                    <h2 style="color: #ff7dcb">Completed tasks</h2>
+
+                    <span>{{profile_data['total_tasks']}}</span>
+                  </div>
+
+                  <div class="chart-svg" style="text-align: center">
+                    <h2
+                      style="
+                        color: white;
+                        float: right;
+                        font-size: 16px;
+                        line-height: 16px;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                      "
+                    >
+                      <span style="color: #ff7dcb">Today</span>
+
+                      <br />
+                      <svg
+                        style="margin-top: 10px"
+                        viewBox="0 0 32 32"
+                        width="16px"
+                        height="16px"
+                        fill="none"
+                        stroke="currentcolor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M16 2 L20 12 30 12 22 19 25 30 16 23 7 30 10 19 2 12 12 12 Z"
+                        />
+                      </svg>
+                      {{profile_data['today_tasks']}}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container-wrapper">
+                <div class="chart-container">
+                  <div class="chart-info-wrapper">
+                    <h2 style="color: #ff9f00">Total sessions</h2>
+                    <span>{{profile_data['total_sessions']}}</span>
+                  </div>
+
+                  <div class="chart-svg">
+                    <svg viewBox="0 0 36 36" class="circular-chart blue">
+                      <path
+                        onmousemove="showTooltip(evt, 'Percentage of successful sessions (i.e., completed fully).');"
+                        onmouseout="hideTooltip();"
+                        class="circle-bg"
+                        d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                      ></path>
+                      <path
+                        onmousemove="showTooltip(evt, 'Percentage of successful sessions (i.e., completed fully).');"
+                        onmouseout="hideTooltip();"
+                        class="circle"
+                        stroke-dasharray="{{profile_data['completed_percentage']}}, 100"
+                        d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                      ></path>
+                      <text
+                        onmousemove="showTooltip(evt, 'Percentage of successful sessions (i.e., completed fully).');"
+                        onmouseout="hideTooltip();"
+                        x="18"
+                        y="20.35"
+                        class="percentage"
+                      >
+                        {{profile_data['completed_percentage']}}%
+                      </text>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-row two">
+              <div class="chart-container-wrapper big">
+                <div class="chart-container" style="background: transparent">
+                  <div class="chart-container-header">
+                    <h2>Progress Graph for {{current_user.username}}</h2>
+                    <span>Last 7 days</span>
+                  </div>
+                  <div class="line-chart">
+                    <canvas id="chart"></canvas>
+                  </div>
+                  <div class="chart-data-details">
+                    <div class="chart-details-header"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<script>
+  function showTooltip(evt, text) {
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = text;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX + 10 + "px";
+    tooltip.style.top = evt.pageY + 10 + "px";
+  }
+
+  function hideTooltip() {
+    var tooltip = document.getElementById("tooltip");
+    tooltip.style.display = "none";
+  }
+
+  var chart = document.getElementById("chart").getContext("2d"),
+    gradient_tasks = chart.createLinearGradient(0, 0, 0, 450);
+  gradient_focus = chart.createLinearGradient(0, 0, 0, 450);
+
+  gradient_focus.addColorStop(0, "rgba(0, 199, 214, 0.6)");
+  gradient_focus.addColorStop(0.5, "rgba(0, 199, 214, 0.3)");
+  gradient_focus.addColorStop(0.95, "rgba(0, 199, 214, 0)");
+
+  gradient_tasks.addColorStop(0, "rgba(255, 125, 203, 0.6)");
+  gradient_tasks.addColorStop(0.5, "rgba(255, 125, 203, 0.3)");
+  gradient_tasks.addColorStop(0.95, "rgba(255, 125, 203, 0)");
+
+  var data = {
+    labels: "{{labels}}".split(","),
+    datasets: [
+      {
+        label: "Focus Time",
+        backgroundColor: gradient_focus,
+        pointBackgroundColor: "#00cfde",
+        pointRadius: 5,
+        pointHoverRadius: 10,
+        borderWidth: 3,
+        borderColor: "#557b88",
+        data: JSON.parse("{{timers}}"),
+        // data: [34, 12, 4, 56, 27, 40, 24],
+      },
+      {
+        label: "Completed Tasks",
+        backgroundColor: gradient_tasks,
+        pointBackgroundColor: "#ff7dcb",
+        pointRadius: 5,
+        pointHoverRadius: 10,
+        borderWidth: 3,
+        borderColor: "#6f5684",
+        data: JSON.parse("{{tasks}}"),
+        // data: [10, 27, 33, 7, 18, 4, 24],
+      },
+    ],
+  };
+
+  var options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    animation: {
+      easing: "easeInOutQuad",
+      duration: 520,
+    },
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            fontColor: "#5e6a81",
+          },
+          gridLines: {
+            color: "rgba(200, 200, 200, 0.08)",
+            lineWidth: 2,
+          },
+        },
+      ],
+      xAxes: [
+        {
+          ticks: {
+            fontColor: "#5e6a81",
+          },
+        },
+      ],
+    },
+    elements: {
+      line: {
+        tension: 0.35,
+      },
+    },
+    legend: {
+      display: true,
+    },
+    point: {
+      backgroundColor: "#00c7d6",
+    },
+    tooltips: {
+      titleFontFamily: "Poppins",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      titleFontColor: "white",
+      caretSize: 5,
+      cornerRadius: 2,
+      xPadding: 10,
+      yPadding: 10,
+    },
+  };
+
+  var chartInstance = new Chart(chart, {
+    type: "line",
+    data: data,
+    options: options,
+  });
+</script>
+{% endblock content %}

@@ -1,0 +1,656 @@
+@import url("https://fonts.googleapis.com/css2?family=DotGothic16&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|Roboto+Condensed|Roboto:100,300,400,500,700");
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+*:focus {
+  outline: none;
+  box-shadow: inset 0px 0px 0px 2px #06cdff;
+}
+
+ul {
+  list-style: none;
+}
+
+.fa,
+.far,
+.fas,
+.fab {
+  user-select: none;
+  -moz-user-select: none;
+}
+
+.fa-play,
+.fa-pause {
+  color: white;
+  transform: scale(0.35);
+}
+
+.fa-circle {
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.1s;
+  border-radius: 100%;
+}
+
+.fa-circle,
+.fa-play,
+.fa-pause {
+  font-size: 6rem;
+}
+
+#togglePlay {
+  margin: auto 0;
+  width: 6rem;
+  height: 6rem;
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+}
+#togglePlay:hover .fa-circle,
+#togglePlay:focus .fa-circle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+html {
+  font-size: 12px;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+header {
+  min-height: 3.3px;
+  height: calc(5% - 2rem);
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: transparent;
+  opacity: 0.9;
+  cursor: default;
+  user-select: none;
+  -moz-user-select: none;
+}
+header p {
+  font-family: Roboto;
+  font-size: 1.15rem;
+  color: white;
+  letter-spacing: -0.05rem;
+}
+
+section {
+  min-height: 300px;
+  overflow-x: hidden;
+  /* margin-top:calc(5%); */
+  height: calc(83%);
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0 1.5rem;
+}
+
+section button {
+  transition: background-color 0.15s;
+  background-color: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: white;
+  font-family: Roboto;
+  border-radius: 7px;
+  font-size: 1.15rem;
+  height: 5%;
+  letter-spacing: -0.05rem;
+  padding: 0.2rem 0.75rem;
+  margin-left: auto;
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+}
+section button:hover,
+section button:focus {
+  background-color: rgba(255, 255, 255, 0.45);
+}
+
+section h1 {
+  font-size: 3.2rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  color: white;
+  /* padding: 0.75rem 1rem; */
+  margin-top: 30px;
+  background: transparent;
+  text-align: center;
+}
+section h1::selection {
+  background-color: transparent;
+  color: white;
+}
+section h1::-moz-selection {
+  background-color: transparent;
+  color: white;
+}
+section article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+section article p#timeRemaining {
+  cursor: default;
+  user-select: none;
+  -moz-user-select: none;
+  color: white;
+  font-size: 6rem;
+  font-family: Roboto;
+  font-weight: 100;
+  margin-top: 1rem;
+  margin-left: 4.3rem;
+}
+section article ul {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  height: 5rem;
+  padding-top: 3.5rem;
+  padding-bottom: 1.5rem;
+  cursor: grab;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  margin-left: 1.1rem;
+}
+section article ul:active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+}
+section article ul::before,
+section article ul::after {
+  width: calc(25vw + 30px);
+  position: absolute;
+  content: " ";
+  left: calc(calc(50.8% - 50vw) - 30px);
+  top: 0;
+  height: 100%;
+  z-index: 1;
+}
+section article ul::after {
+  right: calc(calc(49.2% - 50vw) - 30px);
+  left: unset;
+}
+section article ul li {
+  margin: 2.5rem 1.05rem 0;
+  position: relative;
+  width: 1.45rem;
+  user-select: none;
+  -moz-user-select: none;
+}
+section article ul li::after {
+  content: " ";
+  width: 0;
+  border: solid 1px white;
+  height: 1.5rem;
+  background-color: white;
+  position: absolute;
+  top: -100%;
+  left: calc(50% - 1.45px);
+}
+section article ul li.bigLine {
+  font-size: 1.5rem;
+  color: white;
+  font-family: "Barlow Semi Condensed";
+}
+section article ul li.bigLine[value="0"],
+section article ul li.bigLine[value="5"] {
+  margin-left: 1.25rem;
+  margin-right: 0.8rem;
+}
+section article ul li.bigLine[value="0"]::after,
+section article ul li.bigLine[value="5"]::after {
+  left: calc(50% - 4px);
+}
+section article ul li.bigLine::after {
+  height: 3rem;
+  top: calc(-100% - 1.5rem);
+}
+section article .indicator {
+  font-size: 2rem;
+  color: white;
+  transform: scaleY(1.5);
+}
+
+.progress {
+  height: calc(20%);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.progress hr {
+  width: 0;
+  border: 0;
+  border-left: 1px solid #e9e3e5;
+}
+.progress div {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.progress div p.title {
+  color: lightGrey;
+  font-size: 1.5rem;
+  font-family: "Roboto Condensed";
+}
+.progress div p.counter {
+  user-select: none;
+  -moz-user-select: none;
+  color: white;
+  font-size: 2rem;
+  font-family: "Barlow Semi Condensed";
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.progress div p.counter span.counter {
+  font-size: 5rem;
+  margin-bottom: 1.9rem;
+}
+.progress div p.counter #goalWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.progress div p.counter #goalWrap #plus,
+.progress div p.counter #goalWrap #minus {
+  font-size: 0.8rem;
+  margin: 0.35rem 0.25rem 0;
+  color: #06cdff;
+  cursor: pointer;
+  padding: 0.3rem;
+  background: none;
+  border: none;
+}
+.progress div p.counter #goalWrap #plus:active,
+.progress div p.counter #goalWrap #minus:active {
+  background: lightGrey;
+}
+
+#dialogWrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  z-index: 90;
+  visibility: hidden;
+  align-items: center;
+}
+#dialogWrapper.closed {
+  animation: darkBackground 0.35s reverse forwards ease-in-out;
+}
+#dialogWrapper.open {
+  animation: darkBackground 0.35s forwards;
+}
+#dialogWrapper dialog {
+  margin: calc(5%);
+  margin-top: calc(10%);
+  width: 80%;
+  padding: calc(5%);
+  height: 70%;
+  border: none;
+  display: none;
+  border-radius: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 90;
+  background-color: white;
+}
+#dialogWrapper dialog[open] {
+  display: flex;
+  animation: slideUp 0.45s forwards;
+}
+#dialogWrapper dialog[open].closed {
+  animation: slideDown 0.45s forwards;
+}
+#dialogWrapper dialog p {
+  font-size: 2.5rem;
+  font-family: Roboto;
+  font-weight: 100;
+}
+@media only screen and (max-width: 800px) {
+  #dialogWrapper dialog p {
+    font-size: 2rem;
+  }
+}
+#dialogWrapper dialog p#breakRemaining {
+  font-family: "Barlow Semi Condensed";
+  font-size: 3.5rem;
+}
+#dialogWrapper dialog button {
+  background-color: #f0f0f0;
+  margin-top: 2.5rem;
+  border: none;
+  padding: 1rem 2rem;
+  font-family: Roboto;
+  font-weight: 500;
+  transition: box-shadow 0.15s, transform 0.15s;
+  backface-visibility: hidden;
+  cursor: pointer;
+}
+#dialogWrapper dialog button:hover,
+#dialogWrapper dialog button:focus {
+  box-shadow: 0 0.5rem 0 0 rgba(0, 0, 0, 0.2);
+  transform: translateY(-0.5rem);
+}
+
+@keyframes darkBackground {
+  0% {
+    background-color: transparent;
+    visibility: hidden;
+  }
+  0.1% {
+    visibility: visible;
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.8);
+    visibility: visible;
+  }
+}
+@keyframes slideUp {
+  0% {
+    top: 100vh;
+  }
+  100% {
+    top: 0;
+  }
+}
+@keyframes slideDown {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100vh;
+  }
+}
+
+section h1 {
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+section h1 {
+  font-size: 3rem;
+  padding: 0.5rem;
+  font-weight: normal;
+  letter-spacing: 0.1rem;
+  text-align: center;
+  overflow: hidden;
+}
+section h1 span.typed-text {
+  font-weight: normal;
+  color: white;
+}
+section h1 span.cursor {
+  display: inline-block;
+  background-color: #ccc;
+  margin-left: 0.1rem;
+  width: 3px;
+  animation: blink 1s infinite;
+}
+.container h1 span.cursor.typing {
+  animation: none;
+}
+@keyframes blink {
+  0% {
+    background-color: #ccc;
+  }
+  49% {
+    background-color: #ccc;
+  }
+  50% {
+    background-color: transparent;
+  }
+  99% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: #ccc;
+  }
+}
+
+.fsm {
+  margin: calc(2%);
+  background-color: blue;
+  height: 150px;
+  flex: 1;
+  display: flex;
+  font-family: Roboto;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #f5f5f5;
+  font-size: 1.5rem;
+  border-radius: 15px;
+  transition: 1s;
+  cursor: pointer;
+}
+.fsm .fa {
+  transition: 1s;
+  color: #f5f5f5;
+  font-size: 2.5vw;
+}
+.fsm .fa:before {
+  color: #f5f5f5;
+}
+.fsm .modal-content {
+  height: 0;
+  width: 0;
+  margin: 0;
+}
+.fsm .modal-content h1 {
+  opacity: 0;
+  transition: 1s;
+}
+.fsm div.modal-content {
+  opacity: 0;
+  transition: 1s;
+}
+
+.fsm.game1 {
+  background: linear-gradient(to right, #141e30, #1a2b3d);
+}
+
+.fsm.locked {
+  background: linear-gradient(to right, #1e2633, #1c3c5f);
+}
+
+.fsm.game2 {
+  background: linear-gradient(to right, #141e30, #1a2b3d);
+}
+
+.fsm.game3 {
+  background: linear-gradient(to right, #141e30, #1a2b3d);
+}
+
+.fsm.growing .modal-content h1 {
+  height: auto;
+  margin: 0;
+  opacity: 0;
+  transition-delay: 0.5s;
+}
+
+.fsm.growing div.modal-content {
+  height: auto;
+  margin: 0;
+  opacity: 0;
+  transition-delay: 0.5s;
+}
+
+.fsm p {
+  font-size: 25px;
+  font-weight: 300;
+  opacity: 1;
+}
+
+.fsm.full-screen {
+  height: 100vh;
+  z-index: 100;
+  border-radius: 0;
+}
+.fsm.full-screen .fa {
+  font-size: 10vw;
+}
+.fsm.full-screen .modal-content {
+  width: calc(80%);
+  height: calc(80%);
+  margin: calc(5%);
+}
+.fsm.full-screen .modal-content h1 {
+  transition-delay: 0.5s;
+  opacity: 1;
+  font-weight: 7;
+  font-size: 20px;
+  color: black;
+}
+
+.fsm.full-screen .modal-content h1 {
+  transition-delay: 0.5s;
+  opacity: 1;
+  font-weight: 7;
+  font-size: 20px;
+  color: black;
+  margin: 10px;
+}
+
+.fsm.full-screen p,
+.fsm.growing p {
+  display: none;
+}
+
+.fsm.full-screen div.modal-content {
+  transition-delay: 0.5s;
+  opacity: 1;
+  background: white;
+  border: 4px solid white;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.fsm.shrinking .modal-content h1 {
+  transition-delay: 0s;
+  transition: 0.5s;
+  opacity: 0;
+  display: block;
+}
+.fsm.shrinking div.modal-content {
+  transition-delay: 0s;
+  transition: 0.5s;
+  opacity: 0;
+  display: block;
+}
+.fsm-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.gg-lock {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 1));
+  width: 12px;
+  height: 11px;
+  border: 2px solid;
+  border-top-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-bottom: transparent;
+  margin-top: calc(2%);
+}
+.gg-lock::after {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 16px;
+  height: 10px;
+  border-radius: 2px;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 2px;
+  left: -4px;
+  top: 9px;
+}
+
+.radio_wrapper {
+  margin-top: 30px;
+  box-sizing: border-box;
+  padding: 0;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  /* margin-left: calc(5%); */
+  flex-direction: column;
+  float: left;
+}
+
+.radio_container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #ffffff;
+  width: 100px;
+  height: calc(5%);
+  border-radius: 9999px;
+  box-shadow: inset 0.5px 0.5px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+#tooltip {
+  background: black;
+  border: 1px solid #06cdff;
+  color: white;
+  border-radius: 5px;
+  max-width: 200px;
+  padding: 5px;
+}
+
+input[type="radio"] {
+  appearance: none;
+  display: none;
+}
+
+.radio_container label {
+  font-family: Roboto;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: inherit;
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  margin: 3px;
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: linear 0.3s;
+  color: #505050dd;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #06cdff;
+  color: #ffffff;
+  font-weight: 900;
+  transition: 0.3s;
+}

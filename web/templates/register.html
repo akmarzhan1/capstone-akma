@@ -1,5 +1,5 @@
 <head>
-  <title>TimeX | Sign Up</title>
+  <title>Timero | Sign Up</title>
 
   <link
     href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
@@ -175,17 +175,7 @@
             {{ form.submit(class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none", placeholder="Register~") }}   
           </div>
         </form>
-            
-            <!-- <p class="mt-6 text-xs text-gray-600 text-center">
-              I agree to abide by TimeX's
-              <a href="#" class="border-b border-gray-500 border-dotted">
-                Terms of Service
-              </a>
-              and its
-              <a href="#" class="border-b border-gray-500 border-dotted">
-                Privacy Policy
-              </a>
-            </p> -->
+
           </div>
         </div>
       </div>
@@ -205,75 +195,3 @@ defer
 ></script>
 
 {% endblock content%} 
-
-<!-- <body>
-  <div class="form">
-    <form method="POST" action="">
-      {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-        <h2 style='text-align:center; margin-bottom:40px;'><strong>REGISTRATION</strong></h2>
-        <div class="form-group">
-          {% if form.username.errors %}
-          {{form.username(class="form-control form-control-lg is-invalid")}}
-          <div class="invalid-feedback">
-            {% for error in form.username.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-
-          {% else %}
-          {{form.username(class="form-control form-control-lg", placeholder="Username")}}
-          {% endif %}
-        </div>
-
-        <div class="form-group">
-          {% if form.email.errors %}
-          {{form.email(class="form-control form-control-lg is-invalid")}}
-          <div class="invalid-feedback">
-            {% for error in form.email.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-
-          {% else %}
-          {{form.email(class="form-control form-control-lg", placeholder="Email address")}}
-          {% endif %}
-        </div>
-
-        <div class="form-group">
-          {% if form.password.errors %}
-          {{form.password(class="form-control form-control-lg is-invalid")}}
-          <div class="invalid-feedback">
-            {% for error in form.password.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-
-          {% else %}
-          {{form.password(class="form-control form-control-lg", placeholder="Password")}}
-          {% endif %}
-        </div>
-
-        <div? class="form-group">
-          {% if form.password_confirm.errors %}
-          {{form.password_confirm(class="form-control form-control-lg is-invalid")}}
-          <div class="invalid-feedback">
-            {% for error in form.password_confirm.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-
-          {% else %}
-          {{form.password_confirm(class="form-control form-control-lg", placeholder="Confirm password")}}
-          {% endif %}
-        </div>
-
-      </fieldset>
-
-      <p> Already registered?<a class="ml-2" href="{{url_for('auth.login')}}">Log In</a></p>
-      <div class="input['submit']">
-        {{form.submit(class="btn")}}
-      </div>  
-    </form>
-  </div>
-</body> -->

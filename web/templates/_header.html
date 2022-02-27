@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="icon" href="{{ url_for('static', filename='images/favi.ico') }}">
+  <head>
+    <link rel="icon" href="{{ url_for('static', filename='img/favi.ico') }}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
-      integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styling.css') }}" > -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="HTML5 website template">
-    <meta name="keywords" content="global, template, html, sass, jquery">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="HTML5 website template" />
+    <meta name="keywords" content="global, template, html, sass, jquery" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+  </head>
 
+  <body>
+    <div class="device-notification">
+      <a class="device-notification--logo" href="#0">
+        <img
+          src="{{ url_for('static', filename='img/logo.png') }}"
+          alt="TimeX"
+        />
+        <p>TimeX</p>
+      </a>
+      <p class="device-notification--message">
+        Please orient your device to portrait mode or zoom out. This will make
+        your experience better!
+      </p>
+    </div>
 
-<body>
+    <div class="perspective effect-rotate-left">
+      <div class="container">
+        <div class="outer-nav--return"></div>
+        <div id="viewport" class="l-viewport">
+          <div class="l-wrapper">
+            <header class="header">
+              <a class="header--logo" href="{{url_for('routes.tasks')}}">
+                <img
+                  src="{{ url_for('static', filename='img/logo.png') }}"
+                  alt="Global"
+                />
+                <p>Timero</p>
+              </a>
 
-  <div class="device-notification">
-    <a class="device-notification--logo" href="#0">
-      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="TimeX">
-      <p>TimeX</p>
-    </a>
-    <p class="device-notification--message">Global has so much to offer that we must request you orient your device to portrait or find a larger screen. You won't be disappointed.</p>
-  </div>
+              <div class="header--nav-toggle">
+                <span></span>
+              </div>
+            </header>
 
-  <div class="perspective effect-rotate-left">
-    <div class="container"><div class="outer-nav--return"></div>
-      <div id="viewport" class="l-viewport">
-        <div class="l-wrapper">
-          <header class="header">
-            <a class="header--logo" href="{{url_for('routes.dashboard')}}">
-              <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Global">
-              <p>TimeX</p>
-
-            </a>
-
-
-            <div class="header--nav-toggle">
-              <span></span>
-            </div>
-          </header>
-
-
-          <main role="main" class="home">
-            <div class="col-md-16">
-              {% with messages = get_flashed_messages(with_categories=true)%}
+            <main role="main" class="home">
+              <div class="col-md-16">
+                <!-- {% with messages = get_flashed_messages(with_categories=true)%}
                   {% if messages %}
                     {% for category, message in messages %}
                     <div class='alert alert-{{category}}' style="padding:15px; margin-bottom:20px; margin-left:8px;">
@@ -56,45 +59,72 @@
                     </div>
                     {% endfor %}
                   {% endif %}
-                {% endwith %}
-            {% block content %}{% endblock %}
+                {% endwith %} -->
+                {% block content %}{% endblock %}
+              </div>
+            </main>
+          </div>
         </div>
-        </main>
-
-
       </div>
+      <ul class="outer-nav">
+        {% if current_user.is_authenticated %}
+        <!-- CHANEG HERE  -->
+        <!-- class="is-active" -->
+        <li>
+          <a
+            href="{{url_for('routes.timer')}}"
+            style="text-decoration: none; color: white"
+            >Timer</a
+          >
+        </li>
+        <li>
+          <a
+            href="{{url_for('routes.tasks')}}"
+            style="text-decoration: none; color: white"
+            >Tasks</a
+          >
+        </li>
+        <li>
+          <a
+            href="{{url_for('routes.profile')}}"
+            style="text-decoration: none; color: white"
+            >Profile</a
+          >
+        </li>
+        <li>
+          <a
+            href="{{url_for('settings.settings')}}"
+            style="text-decoration: none; color: white"
+            >Settings</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="{{url_for('auth.logout')}}"
+            style="text-decoration: none; color: white"
+            >Log out</a
+          >
+        </li>
+
+        {% else %}
+        <li class="is-active">Home</li>
+        <li>About</li>
+        <li>Reviews</li>
+        {% endif %}
+      </ul>
     </div>
-  </div>
-  <ul class="outer-nav">
-    {% if current_user.is_authenticated %}
-    <!-- CHANEG HERE  -->
-    <li><a href="#" style="text-decoration: none;color:white;">{{current_user.username}}</a></li>
 
-    <li class="is-active">Home</li>
-    <li><a href="{{url_for('auth.logout')}}" style="text-decoration: none;color:white;">Log out</a></li>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+      window.jQuery ||
+        document.write(
+          '<script src="{{ url_for("static", filename="js/vendor/jquery-2.2.4.min.js") }}"><\/script>'
+        );
+    </script>
+    <script src="{{ url_for('static', filename='js/functions-min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/trex.js') }}"></script>
 
-    {% else %}
-      <li class="is-active">Home</li>
-      <li>Features</li>
-    {% endif %}
-
-  </ul>
-</div>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="{{ url_for("static", filename="js/vendor/jquery-2.2.4.min.js") }}"><\/script>')</script>
-  <script src="{{ url_for('static', filename='js/functions-min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/trex.js') }}"></script>
-
-<!-- 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script> -->
-
-  {% include "_footer.html" %}
-</body>
-
+    {% include "_footer.html" %}
+  </body>
 </html>

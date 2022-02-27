@@ -1,0 +1,158 @@
+<head>
+  <title>Tasks</title>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/tasks.css') }}"
+  />
+</head>
+
+<style>
+
+  /* Added here since was not working when added to the tasks.css for some reason */
+  .special button {
+    position: relative;
+    float: right;
+    padding: 5px 17px 5px 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: transparent;
+    border: none;
+    margin-top: calc(3%);
+  }
+  .special button .btn-background {
+    position: absolute;
+    top: 0;
+    left: 23px;
+    right: 0;
+    height: 100%;
+    background-color: #0f33ff;
+    z-index: -1;
+    -webkit-transition: left 0.2s ease-in-out;
+    transition: left 0.2s ease-in-out;
+  }
+  .special button:hover .btn-background {
+    left: 0;
+  }
+  .special button:focus {
+    outline: none;
+  }
+  .special button svg {
+    position: relative;
+    left: 5px;
+    width: 15px;
+    fill: #fff;
+  }
+</style>
+
+{% extends "_header.html" %} {% block content %}
+
+<body>
+  <nav class="l-side-nav">
+    <ul class="side-nav">
+      <li class="is-active"><span>Tasks</span></li>
+    </ul>
+  </nav>
+  <ul class="l-main-content main-content">
+    <li class="l-section section section--is-active">
+      <div class="intro">
+        <div class="special">
+          <h1 style="float: left">Hi, {{current_user.username}}!</h1>
+
+          <!-- Redirect to the timer -->
+          <a href="{{ url_for('routes.timer')}}">
+            <button class="cta" style="color: white">
+              Set a timer
+              <svg
+                version="1.1"
+                id="Layer_1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                x="0px"
+                y="0px"
+                viewBox="0 0 150 118"
+                style="enable-background: new 0 0 150 118"
+                xml:space="preserve"
+              >
+                <g
+                  transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"
+                >
+                  <path
+                    d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"
+                  />
+                </g>
+              </svg>
+              <span class="btn-background"></span>
+            </button>
+          </a>
+        </div>
+
+        <svg style="display: none">
+          <symbol id="plus" viewbox="0 0 281.488 281.488">
+            <g>
+              <path
+                d="M140.744,0C63.138,0,0,63.138,0,140.744s63.138,140.744,140.744,140.744s140.744-63.138,140.744-140.744
+                        S218.351,0,140.744,0z M140.744,263.488C73.063,263.488,18,208.426,18,140.744S73.063,18,140.744,18
+                        s122.744,55.063,122.744,122.744S208.425,263.488,140.744,263.488z"
+              />
+              <path
+                d="M210.913,131.744h-61.168V70.576c0-4.971-4.029-9-9-9s-9,4.029-9,9v61.168H70.576c-4.971,0-9,4.029-9,9s4.029,9,9,9h61.168
+                        v61.168c0,4.971,4.029,9,9,9s9-4.029,9-9v-61.168h61.168c4.971,0,9-4.029,9-9S215.883,131.744,210.913,131.744z"
+              />
+            </g>
+          </symbol>
+        </svg>
+        <div class="wrapper">
+          <div class="to-do">
+            <div class="to-do__inner">
+              <form method="POST" action="{{ url_for('routes.add_task')}}">
+                {{ form.hidden_tag() }}
+
+                <!-- <input class="input" id="input" type="text" placeholder="What would you like to do today?"> -->
+
+                {% if form.title.errors %} {{ form.title(class="input",
+                id="input", type="text", placeholder="What would you like to do
+                today?") }}
+
+                <div class="invalid-feedback">
+                  {% for error in form.title.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                {%else%} {{ form.title(class="input", id="input", type="text",
+                placeholder="What would you like to do today?") }} {% endif %}
+                <button type="submit" class="to-do__add">
+                  <svg class="to-do__icon">
+                    <use xlink:href="#plus"></use>
+                  </svg>
+                </button>
+              </form>
+            </div>
+
+            <ul class="list">
+              {% for task in tasks|sort(attribute='time_created') %}
+              <a
+                href="{{ url_for('routes.complete', task_id=task.id)}}"
+                style="text-decoration: none; margin-right: 30px; color: white"
+              >
+                <li class="list__item">
+                  <span class="list__circle"> </span>
+                  <div class="list__text">{{task.title}}</div>
+                </li>
+              </a>
+
+              {% endfor %}
+            </ul>
+
+            <div class="text-right">
+              <a href="{{url_for('routes.delete_all')}}" class="btn"
+                >Clear all</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</body>
+
+{% endblock content %}

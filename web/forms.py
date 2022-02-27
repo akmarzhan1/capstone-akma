@@ -34,20 +34,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-# add tasks
-class AddTasksForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired(), Length(min=2, max=15)])
-    description = StringField('Description', validators=[DataRequired(), Length(min=2, max=60)])
-    deadline = DateField('DatePicker', format='%Y-%m-%d', validators=[DataRequired()])
+# todo tasks form
+class AddToDoForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(min=1, max=60)])
     submit = SubmitField('Add tasks')
-
-
-# setup the timer
-class AddTimerForm(FlaskForm):
-    focus = IntegerField('Focus', validators=[DataRequired(), Length(min=1, max=3)])
-    rest = IntegerField('Rest', validators=[DataRequired(), Length(min=1, max=2)])
-    submit = SubmitField('Start timer')
-
 
 # reset form
 class ResetForm(FlaskForm):

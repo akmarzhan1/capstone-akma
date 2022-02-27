@@ -1,0 +1,996 @@
+<head>
+  <title>Timer</title>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/timer.css') }}"
+  />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+</head>
+
+{% extends "_header.html" %} {% block content %}
+
+<!-- HTML for the timer logic -->
+
+<body>
+  <nav class="l-side-nav">
+    <ul class="side-nav">
+      <li class="is-active"><span>Timer</span></li>
+    </ul>
+  </nav>
+  <ul class="l-main-content main-content">
+    <li class="l-section section section--is-active">
+      <div class="intro">
+
+        <!-- Adding the dialog windows for focusing and when tab not active -->
+        <div id="dialogWrapper">
+          <dialog id="startBreakDialog">
+            <p>Break time!</p>
+            <button id="startBreak">START</button>
+          </dialog>
+          <dialog id="visibilityDialog">
+            <p>
+              We detected that you left the website, please come back or change
+              your "Deep Focus" settings.
+            </p>
+            <button id="cancelVisibility">OK</button>
+          </dialog>
+          <dialog id="endBreakDialog">
+            <p>Get back to work!</p>
+            <button id="endBreak">OK</button>
+          </dialog>
+          <dialog id="breakTimerDialog">
+
+            <!-- Showcasing games (only unlocked ones) -->
+            <div id="fsm_container" class="fsm-container">
+              <div class="fsm game1">
+                <p>Ink Drawing</p>
+                <div id="audio-resources" jstcache="0"></div>
+                <div class="modal-content">
+                  <h1>
+                    Draw with Ink! Click to change color. Click twice to clear.
+                  </h1>
+                  {% include "_game.html" %}
+                  <iframe
+                    src="https://jacksonpollock.org"
+                    title="Paint like Jackson Pollock."
+                  ></iframe>
+                </div>
+              </div>
+
+              {% if game_access['game1']==True %}
+
+              <div class="fsm game2">
+                <p>Starbucks Order</p>
+                <div id="audio-resources" jstcache="0"></div>
+
+                <div class="modal-content">
+                  <h1>Input your name and see the magic of Starbucks:)</h1>
+
+                  {% include "_game.html" %}
+                  <iframe
+                    src="https://www.whatsmystarbucksname.com/"
+                    title="Order a coffee."
+                  ></iframe>
+                </div>
+              </div>
+              {% else %}
+              <div class="fsm locked">
+                <i class="gg-lock"></i>
+                <p style="color: rgb(100, 100, 100)">Starbucks Order</p>
+                <div class="modal-content">
+                  <h1>
+                    You have to have at least 2 completed session and 5 minutes
+                    of total focus time to unlock this game.
+                  </h1>
+                </div>
+              </div>
+              {% endif %} {% if game_access['game2']==True %}
+
+              <div class="fsm game3">
+                <p>Solar System</p>
+                <div id="audio-resources" jstcache="0"></div>
+
+                <div class="modal-content">
+                  <h1>Explore the space!</h1>
+
+                  {% include "_game.html" %}
+                  <iframe
+                    src="https://joshworth.com/dev/pixelspace/pixelspace_solarsystem.html"
+                    title="Scroll through the solar system at scale."
+                  ></iframe>
+                </div>
+              </div>
+
+              {% else %}
+              <div class="fsm locked">
+                <i class="gg-lock"></i>
+                <p style="color: rgb(100, 100, 100)">Solar System</p>
+                <div class="modal-content">
+                  <h1>
+                    You have to have at least 10 completed session and 100
+                    minutes of total focus time to unlock this game.
+                  </h1>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+
+            <p id="breakRemaining">05:00</p>
+            <button id="cancelBreak">CANCEL</button>
+          </dialog>
+        </div>
+        <header id="header"></header>
+
+        <div
+          id="tooltip"
+          display="none"
+          style="position: absolute; display: none"
+        ></div>
+
+        <!-- Timer -->
+        <section id="section">
+          <h1 id="sessionName">
+            <span class="typed-text"></span><span class="cursor"> &nbsp;</span>
+          </h1>
+
+          <button id="reset" style="float: right">RESET</button>
+
+          <article>
+            <p id="timeRemaining">25:00</p>
+            <ul id="timerUl">
+              <li class="bigLine" value="0">0</li>
+              <li class="smallLine" value="1"></li>
+              <li class="smallLine" value="2"></li>
+              <li class="smallLine" value="3"></li>
+              <li class="smallLine" value="4"></li>
+              <li class="bigLine" value="5">5</li>
+              <li class="smallLine" value="6"></li>
+              <li class="smallLine" value="7"></li>
+              <li class="smallLine" value="8"></li>
+              <li class="smallLine" value="9"></li>
+              <li class="bigLine" value="10">10</li>
+              <li class="smallLine" value="11"></li>
+              <li class="smallLine" value="12"></li>
+              <li class="smallLine" value="13"></li>
+              <li class="smallLine" value="14"></li>
+              <li class="bigLine" value="15">15</li>
+              <li class="smallLine" value="16"></li>
+              <li class="smallLine" value="17"></li>
+              <li class="smallLine" value="18"></li>
+              <li class="smallLine" value="19"></li>
+              <li class="bigLine" value="20">20</li>
+              <li class="smallLine" value="21"></li>
+              <li class="smallLine" value="22"></li>
+              <li class="smallLine" value="23"></li>
+              <li class="smallLine" value="24"></li>
+              <li class="bigLine" value="25">25</li>
+              <li class="smallLine" value="26"></li>
+              <li class="smallLine" value="27"></li>
+              <li class="smallLine" value="28"></li>
+              <li class="smallLine" value="29"></li>
+              <li class="bigLine" value="30">30</li>
+              <li class="smallLine" value="31"></li>
+              <li class="smallLine" value="32"></li>
+              <li class="smallLine" value="33"></li>
+              <li class="smallLine" value="34"></li>
+              <li class="bigLine" value="35">35</li>
+              <li class="smallLine" value="36"></li>
+              <li class="smallLine" value="37"></li>
+              <li class="smallLine" value="38"></li>
+              <li class="smallLine" value="39"></li>
+              <li class="bigLine" value="40">40</li>
+              <li class="smallLine" value="41"></li>
+              <li class="smallLine" value="42"></li>
+              <li class="smallLine" value="43"></li>
+              <li class="smallLine" value="44"></li>
+              <li class="bigLine" value="45">45</li>
+              <li class="smallLine" value="46"></li>
+              <li class="smallLine" value="47"></li>
+              <li class="smallLine" value="48"></li>
+              <li class="smallLine" value="49"></li>
+              <li class="bigLine" value="50">50</li>
+              <li class="smallLine" value="51"></li>
+              <li class="smallLine" value="52"></li>
+              <li class="smallLine" value="53"></li>
+              <li class="smallLine" value="54"></li>
+              <li class="bigLine" value="55">55</li>
+              <li class="smallLine" value="56"></li>
+              <li class="smallLine" value="57"></li>
+              <li class="smallLine" value="58"></li>
+              <li class="smallLine" value="59"></li>
+            </ul>
+          </article>
+          <article>
+            <i class="fas fa-sort-up indicator"></i>
+            <button class="fa-layers fa-fw" id="togglePlay">
+              <i class="fas fa-circle"></i
+              ><i class="fas fa-play" id="playpause"></i>
+            </button>
+
+            <div
+              class="radio_wrapper"
+              onmousemove="showTooltip(event, 'Deep Focus Mode: When mode on, the app will block you from leaving the page (e.g., having another tab open).');"
+              onmouseout="hideTooltip();"
+            >
+              <div
+                class="radio_container"
+                onmousemove="showTooltip(event, 'Deep Focus Mode: When mode on, the app will block you from leaving the page (e.g., having another tab open).');"
+                onmouseout="hideTooltip();"
+              >
+                {% if current_user.block==True %}
+                <input
+                  onclick="switch_on()"
+                  type="radio"
+                  name="radio"
+                  id="turn_on"
+                  checked
+                />
+                <label for="turn_on">On</label>
+                <input
+                  onclick="switch_off()"
+                  type="radio"
+                  name="radio"
+                  id="turn_off"
+                />
+                <label for="turn_off">Off</label>
+                {% else %}
+                <input
+                  onclick="switch_on()"
+                  type="radio"
+                  name="radio"
+                  id="turn_on"
+                />
+                <label for="turn_on">On</label>
+                <input
+                  onclick="switch_off()"
+                  type="radio"
+                  name="radio"
+                  id="turn_off"
+                  checked
+                />
+                <label for="turn_off">Off</label>
+
+                {% endif %}
+              </div>
+            </div>
+          </article>
+          <div class="progress" id="footer">
+            <div>
+              <p class="title">SESSION</p>
+              <p class="counter">
+                <span class="counter" id="roundCounter">0</span>/4
+              </p>
+            </div>
+            <hr />
+            <div>
+              <p class="title">GOAL</p>
+              <p class="counter">
+                <span class="counter" id="goalCounter">0</span>/<span
+                  id="goalWrap"
+                >
+                  <button id="minus"><i class="fas fa-minus"></i></button
+                  ><span id="goalMax">30</span>
+                  <button id="plus"><i class="fas fa-plus"></i></button
+                ></span>
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </li>
+  </ul>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+
+  // toggling the deep focus mode
+  function switch_on() {
+    var request = $.ajax({
+      url: "{{ url_for('timer.switch_focus') }}",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ new_state: true }),
+    }).done(function (request) {});
+  }
+
+  function switch_off() {
+    var request = $.ajax({
+      url: "{{ url_for('timer.switch_focus') }}",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ new_state: false }),
+    }).done(function (request) {});
+  }
+
+  // tracking whether tab is active 
+  document.addEventListener(
+    "visibilitychange",
+    function () {
+      if (
+        JSON.parse("{{current_user.block}}".toLowerCase()) == true &&
+        globalTimerState == true
+      ) {
+        if (document.hidden) {
+          alarmOn = true;
+          playAlarm();
+        } else {
+          stopAlarm();
+          openDialog(visibilityDialog);
+          console.log("bye");
+        }
+      }
+    },
+    false
+  );
+
+  cancelVisibility.addEventListener("click", (event) => {
+    closeDialog(visibilityDialog);
+  });
+
+  //show description for the deep focus mode toggle
+  function showTooltip(evt, text) {
+    let tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = text;
+    tooltip.style.display = "block";
+    tooltip.style.left = evt.pageX + 10 + "px";
+    tooltip.style.top = evt.pageY + 10 + "px";
+  }
+
+  function hideTooltip() {
+    var tooltip = document.getElementById("tooltip");
+    tooltip.style.display = "none";
+  }
+
+  //the game graphics - full screen when clicked and so on
+  var fsmActual = document.createElement("div");
+  fsmActual.setAttribute("id", "fsm_actual");
+  document.body.appendChild(fsmActual);
+  var $fsm = document.querySelectorAll(".fsm");
+  var $fsmActual = document.querySelector("#fsm_actual");
+  $fsmActual.style.position = "absolute";
+  var globalTimerState = false;
+
+  var position = {};
+  var size = {};
+
+  //modal action stuffs
+  var openFSM = function (event) {
+    var $this = event.currentTarget;
+    position = $this.getBoundingClientRect();
+    size = {
+      width: window.getComputedStyle($this).width,
+      height: window.getComputedStyle($this).height,
+    };
+
+    $fsmActual.style.position = "absolute";
+    $fsmActual.style.top = position.top + "px";
+    $fsmActual.style.left = position.left + "px";
+    $fsmActual.style.height = size.height;
+    $fsmActual.style.width = size.width;
+    $fsmActual.style.margin = $this.style.margin;
+
+    setTimeout(function () {
+      $fsmActual.innerHTML = $this.innerHTML;
+      var classes = $this.classList.value.split(" ");
+      for (var i = 0; i < classes.length; i++) {
+        $fsmActual.classList.add(classes[i]);
+      }
+      $fsmActual.classList.add("growing");
+      $fsmActual.style.height = "100vh";
+      $fsmActual.style.width = "100vw";
+      $fsmActual.style.top = "0";
+      $fsmActual.style.left = "0";
+      $fsmActual.style.margin = "0";
+    }, 1);
+
+    setTimeout(function () {
+      $fsmActual.classList.remove("growing");
+      $fsmActual.classList.add("full-screen");
+    }, 1000);
+  };
+
+  var closeFSM = function (event) {
+    var $this = event.currentTarget;
+
+    $this.style.height = size.height;
+    $this.style.width = size.width;
+    $this.style.top = position.top + "px";
+    $this.style.left = position.left + "px";
+    $this.style.margin = "0";
+    $this.classList.remove("full-screen");
+    $this.classList.add("shrinking");
+
+    setTimeout(function () {
+      while ($this.firstChild) $this.removeChild($this.firstChild);
+      var classList = $this.classList;
+      while (classList.length > 0) {
+        classList.remove(classList.item(0));
+      }
+      $this.style = "";
+    }, 1000);
+  };
+
+  for (var i = 0; i < $fsm.length; i++) {
+    $fsm[i].addEventListener("click", openFSM);
+  }
+  $fsmActual.addEventListener("click", closeFSM);
+
+  // to be able to work with .ajax and send requests 
+  var csrftoken = $("meta[name=csrf-token]").attr("content");
+  $.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+      if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
+    },
+  });
+
+  // pomodoro timer 
+  class PomodoroTimer {
+    constructor() {
+      this.goalMax = Number(localStorage.getItem("goalMax")) || 20;
+      goalMax.innerText = this.goalMax;
+      this.goalCounter = Number(localStorage.getItem("goalCounter")) || 0;
+      goalCounter.innerText = this.goalCounter;
+      this.roundCounter = Number(localStorage.getItem("roundCounter"));
+      roundCounter.innerText = this.roundCounter;
+      
+      this.timerState = false;
+      const timerMins = Number(
+          localStorage.getItem("timerMinutes") !== null
+            ? localStorage.getItem("timerMinutes")
+            : 25
+        ),
+        timerSecs = Number(
+          localStorage.getItem("timerSeconds") !== null
+            ? localStorage.getItem("timerSeconds")
+            : 5
+        );
+
+      this.breakMinutes = 5;
+      this.breakSeconds = 0;
+
+      this.swipeStart = null;
+
+      this.timeStart = null;
+      this.timerId = null;
+
+      this.rotateTimerLeft = this.rotateTimerLeft.bind(this);
+      this.rotateTimerRight = this.rotateTimerRight.bind(this);
+      this.rotateTimerTo = this.rotateTimerTo.bind(this);
+      this.updateTimer = this.updateTimer.bind(this);
+      this.updateBreakTimer = this.updateBreakTimer.bind(this);
+
+      this.rotateTimerTo(timerSecs > 0 ? timerMins + 1 : timerMins);
+      this.timerMinutes = timerMins;
+      this.timerSeconds = timerSecs;
+      timeRemaining.innerText = this.getTimerText();
+      if (this.timerSeconds !== 0) {
+        timerUl.style.left = ((60 - this.timerSeconds) / 60) * 29 + "px";
+      }
+    }
+
+    get timerMinutes() {
+      return this._timerMinutes;
+    }
+
+    set timerMinutes(number) {
+      if (typeof number === "number") {
+        this._timerMinutes = number;
+        timeRemaining.innerText = this.getTimerText();
+        localStorage.setItem("timerMinutes", number);
+      }
+    }
+
+    get timerSeconds() {
+      return this._timerSeconds;
+    }
+
+    set timerSeconds(number) {
+      if (typeof number === "number") {
+        this._timerSeconds = number;
+        timeRemaining.innerText = this.getTimerText();
+        localStorage.setItem("timerSeconds", number);
+      }
+    }
+
+    getTimerText() {
+      return (
+        (this.timerMinutes < 10 ? "0" + this.timerMinutes : this.timerMinutes) +
+        ":" +
+        (this.timerSeconds < 10 ? "0" + this.timerSeconds : this.timerSeconds)
+      );
+    }
+
+    rotateTimerLeft() {
+      if (timerUl.children[30].value < 59) {
+        var request = $.ajax({
+          url: "{{ url_for('timer.finish_timer') }}",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ time_remaining: this.getTimerText() }),
+        }).done(function (request) {});
+
+        timerUl.append(timerUl.children[0]);
+      }
+      this.timerMinutes = timerUl.children[30].value;
+      this.timerSeconds = 0;
+    }
+
+    rotateTimerRight() {
+      if (timerUl.children[30].value > 0) {
+        var request = $.ajax({
+          url: "{{ url_for('timer.finish_timer') }}",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ time_remaining: this.getTimerText() }),
+        }).done(function (request) {});
+
+        timerUl.prepend(timerUl.children[timerUl.children.length - 1]);
+      }
+      this.timerMinutes = timerUl.children[30].value;
+      this.timerSeconds = 0;
+    }
+
+    rotateTimerTo(number) {
+      let i = timerUl.children[30].value;
+      if (number < 0 || number > 59 || number === i) {
+        return;
+      }
+      const rotate = i < number ? this.rotateTimerLeft : this.rotateTimerRight;
+      for (let ii = Math.abs(i - number); ii > 0; --ii) {
+        rotate();
+      }
+    }
+
+    decreaseGoalMax() {
+      if (this.goalMax <= 4) {
+        return;
+      }
+      this.goalMax -= 4;
+      goalMax.innerText = this.goalMax;
+      if (this.goalCounter >= this.goalMax) {
+        this.resetGoal();
+        this.resetRound();
+      }
+      localStorage.setItem("goalMax", this.goalMax);
+    }
+
+    increaseGoalMax() {
+      this.goalMax += 4;
+      goalMax.innerText = this.goalMax;
+      localStorage.setItem("goalMax", this.goalMax);
+    }
+
+    increaseGoalCounter() {
+      ++this.goalCounter;
+      if (this.goalCounter > this.goalMax) {
+        this.goalCounter = 1;
+      }
+      goalCounter.innerText = this.goalCounter;
+      localStorage.setItem("goalCounter", this.goalCounter);
+    }
+
+    increaseRoundCounter() {
+      ++this.roundCounter;
+      if (this.roundCounter > 4) {
+        this.roundCounter = 1;
+      }
+      roundCounter.innerText = this.roundCounter;
+      localStorage.setItem("roundCounter", this.roundCounter);
+    }
+
+    resetRound() {
+      var request = $.ajax({
+        url: "{{ url_for('timer.reset_round') }}",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ time_remaining: this.getTimerText() }),
+      }).done(function (request) {});
+
+      this.roundCounter = roundCounter.innerText = 0;
+      localStorage.setItem("roundCounter", 0);
+    }
+
+    resetGoal() {
+      this.goalCounter = goalCounter.innerText = 0;
+      localStorage.setItem("goalCounter", 0);
+    }
+
+    toggleTimerState() {
+      if (this.timerMinutes === 0 && this.timerSeconds === 0) {
+        return;
+      }
+      this.timerState = !this.timerState;
+      playpause.classList.toggle("fa-play");
+      if (globalTimerState == false) {
+        globalTimerState = true;
+      } else {
+        globalTimerState = false;
+      }
+
+      playpause.classList.toggle("fa-pause");
+      if (this.timerState) {
+        this.timeStart = new Date();
+
+        var request = $.ajax({
+          url: "{{ url_for('timer.update_timer') }}",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ time_remaining: this.getTimerText() }),
+        }).done(function (request) {});
+
+        this.timerId = setInterval(this.updateTimer, 200);
+      } else if (!this.timerState) {
+        clearInterval(this.timerId);
+        this.timerId = null;
+
+        var request = $.ajax({
+          url: "{{ url_for('timer.update_timer') }}",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ time_remaining: this.getTimerText() }),
+        }).done(function (request) {});
+      }
+    }
+
+    updateTimer() {
+      const delta = new Date(new Date() - this.timeStart);
+      if (delta.getTime() > 1000) {
+        this.timeStart = new Date(this.timeStart.getTime() + 1000);
+        if (this.timerSeconds <= 0) {
+          let tMin =
+            this.timerMinutes - (Math.floor(delta.getTime() / 60000) + 1);
+          if (this.timerMinutes !== timerUl.children[30].value) {
+            this.rotateTimerTo(tMin + 1);
+            timerUl.style.left = "";
+          }
+          this.timerMinutes = this.timerMinutes === 0 ? 0 : tMin;
+          this.timerSeconds = 60;
+        }
+        this.timerSeconds -= Math.floor(delta.getTime() / 1000) % 60;
+        if (this.timerSeconds !== 0) {
+          timerUl.style.left = ((60 - this.timerSeconds) / 60) * 29 + "px";
+        }
+        if (this.timerMinutes <= 0 && this.timerSeconds <= 0) {
+          timerUl.style.left = "";
+          this.rotateTimerTo(0);
+          this.increaseRoundCounter();
+          this.increaseGoalCounter();
+          clearInterval(this.timerId);
+          this.timerId = null;
+          this.timerState = false;
+          playpause.classList.toggle("fa-play");
+          playpause.classList.toggle("fa-pause");
+          alarmOn = true;
+          playAlarm();
+          openDialog(startBreakDialog);
+        }
+      }
+    }
+
+    startBreakTimer() {
+      if (this.roundCounter >= 4) {
+        breakRemaining.innerText = "15:00";
+        this.breakMinutes = 15;
+      } else {
+        breakRemaining.innerText = "05:00";
+        this.breakMinutes = 5;
+      }
+      this.breakSeconds = 0;
+      this.timeStart = new Date();
+      this.timerId = setInterval(this.updateBreakTimer, 200);
+
+      var request = $.ajax({
+        url: "{{ url_for('timer.finish_timer') }}",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ time_remaining: "completed" }),
+      }).done(function (request) {});
+    }
+
+    updateBreakTimer() {
+      const delta = new Date(new Date() - this.timeStart);
+      if (delta.getTime() > 1000) {
+        this.timeStart = new Date(this.timeStart.getTime() + 1000);
+        if (this.breakSeconds <= 0) {
+          this.breakMinutes -= Math.floor(delta.getTime() / 60000) + 1;
+          this.breakSeconds = 60;
+        }
+        this.breakSeconds -= Math.floor(delta.getTime() / 1000) % 60;
+        breakRemaining.innerText =
+          (this.breakMinutes < 10
+            ? "0" + this.breakMinutes
+            : this.breakMinutes) +
+          ":" +
+          (this.breakSeconds < 10
+            ? "0" + this.breakSeconds
+            : this.breakSeconds);
+        if (this.breakMinutes <= 0 && this.breakSeconds <= 0) {
+          clearInterval(this.timerId);
+          this.timerId = null;
+          alarmOn = true;
+          closeDialog(breakTimerDialog);
+          $fsmActual.click();
+          openDialog(endBreakDialog);
+        }
+      }
+    }
+  }
+
+  const pomodoro = new PomodoroTimer();
+  const alarm = new Audio(
+    "https://docs.google.com/uc?export=download&id=1ejiobOVkqlWrb2EYuTd_RHNSjlWkm6dn"
+  );
+
+  const hasVibrate = typeof navigator !== undefined && "vibrate" in navigator;
+  let alarmOn = false;
+
+  alarm.addEventListener("ended", _playAlarm);
+  let alarmCount = 0;
+  function _playAlarm() {
+    if (alarmCount++ < 5) {
+      alarm.play();
+    } else {
+      alarmCount = 0;
+    }
+  }
+  function playAlarm() {
+    if (alarmOn) {
+      _playAlarm();
+      if (hasVibrate) {
+        navigator.vibrate([200, 400, 200, 400, 200, 400, 200]);
+      }
+    }
+  }
+
+  function stopAlarm() {
+    alarmOn = false;
+    alarm.pause();
+    if (hasVibrate) {
+      navigator.vibrate(0);
+    }
+  }
+
+  function openDialog(el) {
+    dialogWrapper.classList.add("open");
+    el.setAttribute("open", "");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDialog(el) {
+    document.body.style.overflow = "";
+    el.classList.add("closed");
+    dialogWrapper.style.visibility = "visible";
+    dialogWrapper.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    dialogWrapper.classList.remove("open");
+    setTimeout(() => {
+      dialogWrapper.classList.add("closed");
+      dialogWrapper.style.visibility = "";
+      dialogWrapper.style.backgroundColor = "";
+    }, 9);
+    setTimeout(() => {
+      el.removeAttribute("open");
+      el.classList.remove("closed");
+      dialogWrapper.classList.remove("closed");
+    }, 450);
+  }
+
+  startBreak.addEventListener("click", (event) => {
+    stopAlarm();
+    closeDialog(startBreakDialog);
+    openDialog(breakTimerDialog);
+    setTimeout(() => pomodoro.startBreakTimer(), 450);
+  });
+
+  endBreak.addEventListener("click", (event) => {
+    stopAlarm();
+    closeDialog(endBreakDialog);
+  });
+
+  cancelBreak.addEventListener("click", (event) => {
+    clearInterval(pomodoro.timerId);
+    this.timerId = null;
+    closeDialog(breakTimerDialog);
+  });
+
+  reset.addEventListener("click", (event) => {
+    pomodoro.resetGoal();
+    pomodoro.resetRound();
+    pomodoro.rotateTimerTo(25);
+    pomodoro.timerMinutes = 25;
+    pomodoro.timerSeconds = 0;
+    timerUl.style.left = "";
+    clearInterval(pomodoro.timerId);
+    pomodoro.timerState = false;
+    playpause.classList.remove("fa-pause");
+    playpause.classList.add("fa-play");
+  });
+
+  function swipeStart(event) {
+    if (pomodoro.timerState) {
+      return;
+    }
+
+    event.preventDefault();
+
+    event.clientX = event.clientX || event.touches[0].pageX;
+    pomodoro.swipeStart = event.clientX;
+  }
+
+  function swipeMove(event) {
+    event.preventDefault();
+    if (pomodoro.swipeStart === null) {
+      return;
+    }
+
+    event.clientX = event.clientX || event.touches[0].pageX;
+    let left = event.clientX > pomodoro.swipeStart;
+
+    if (
+      (timerUl.children[30].value !== 0 && left) ||
+      (timerUl.children[30].value !== 59 && !left)
+    ) {
+      if (Math.abs(event.clientX - pomodoro.swipeStart) >= 29) {
+        if (left) {
+          pomodoro.rotateTimerRight();
+          pomodoro.swipeStart += 29;
+        } else {
+          pomodoro.rotateTimerLeft();
+          pomodoro.swipeStart -= 29;
+        }
+        timerUl.style.left = "";
+      } else {
+        timerUl.style.left = event.clientX - pomodoro.swipeStart + "px";
+      }
+    }
+  }
+
+  function swipeEnd() {
+    if (pomodoro.swipeStart === null) {
+      return;
+    }
+
+    const left = Number(timerUl.style.left.slice(0, -2)),
+      end = () => {
+        timerUl.style.left = "";
+        pomodoro.swipeStart = null;
+      };
+
+    if (left > 14) {
+      slideRight(timerUl, 29 - left, (29 - left) * 10, () => {
+        pomodoro.rotateTimerRight();
+        end();
+      });
+    } else if (left < -14) {
+      slideRight(timerUl, -29 - left, Math.abs(-29 - left) * 10, () => {
+        pomodoro.rotateTimerLeft();
+        end();
+      });
+    } else {
+      slideRight(timerUl, -left, Math.abs(left) * 10, end);
+    }
+  }
+
+  function slideRight(el, left, milliseconds, callback) {
+    let i = Number(el.style.left.slice(0, -2)) || 0,
+      count = 0;
+    const repeat = Math.floor(Math.abs(milliseconds / left)),
+      x = left / repeat;
+    if (left === 0) {
+      callback();
+      return;
+    }
+    let id = setInterval(() => {
+      i += x;
+      el.style.left = Math.floor(i) + "px";
+      if (++count > repeat) {
+        clearInterval(id);
+        callback();
+      }
+    }, repeat);
+  }
+
+  timerUl.addEventListener("mousedown", swipeStart);
+  timerUl.addEventListener("touchstart", swipeStart);
+
+  document.addEventListener("mousemove", swipeMove);
+  document.addEventListener("touchmove", swipeMove);
+
+  document.addEventListener("mouseup", swipeEnd);
+  document.addEventListener("touchend", swipeEnd);
+
+  sessionName.addEventListener("keypress", (event) =>
+    event.key === "Enter" ? event.target.blur() | event.preventDefault() : null
+  );
+
+  togglePlay.addEventListener("click", () => pomodoro.toggleTimerState());
+
+  minus.addEventListener("click", () => pomodoro.decreaseGoalMax());
+
+  plus.addEventListener("click", () => pomodoro.increaseGoalMax());
+
+  document.addEventListener("mousedown", (event) => {
+    if (
+      dialogWrapper.classList.contains("open") &&
+      event.target.id === "dialogWrapper"
+    ) {
+      event.preventDefault();
+    }
+  });
+
+  let audioReady = false;
+
+  const readyUpAudio = () => {
+    alarm.play();
+    alarm.pause();
+    document.removeEventListener("click", readyUpAudio);
+  };
+  document.addEventListener("click", readyUpAudio);
+
+  if ("wakeLock" in navigator) {
+    navigator.wakeLock.request("display");
+  }
+
+  // typed text
+  const typedTextSpan = document.querySelector(".typed-text");
+  const cursorSpan = document.querySelector(".cursor");
+
+  const textArray = [
+    "Today will be a nice day!",
+    "Focus time is always good:)",
+    "Happy work time!",
+    "Today we will finish everything!",
+  ];
+  const typingDelay = 200;
+  const erasingDelay = 100;
+  const newTextDelay = 2000; // Delay between current and next text
+  let textArrayIndex = 0;
+  let charIndex = 0;
+
+  function type() {
+    if (charIndex < textArray[textArrayIndex].length) {
+      if (!cursorSpan.classList.contains("typing"))
+        cursorSpan.classList.add("typing");
+      typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+      charIndex++;
+      setTimeout(type, typingDelay);
+    } else {
+      cursorSpan.classList.remove("typing");
+      setTimeout(erase, newTextDelay);
+    }
+  }
+
+  function erase() {
+    if (charIndex > 0) {
+      if (!cursorSpan.classList.contains("typing"))
+        cursorSpan.classList.add("typing");
+      typedTextSpan.textContent = textArray[textArrayIndex].substring(
+        0,
+        charIndex - 1
+      );
+      charIndex--;
+      setTimeout(erase, erasingDelay);
+    } else {
+      cursorSpan.classList.remove("typing");
+      textArrayIndex++;
+      if (textArrayIndex >= textArray.length) textArrayIndex = 0;
+      setTimeout(type, typingDelay + 1100);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // On DOM Load initiate the effect
+    if (textArray.length) setTimeout(type, newTextDelay + 250);
+  });
+</script>
+
+<script
+  defer="defer"
+  src="https://use.fontawesome.com/releases/v5.0.1/js/all.js"
+></script>
+
+{% endblock content %}

@@ -23,7 +23,7 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'GET':
         if current_user and current_user.is_authenticated:
-            return redirect(url_for('routes.dashboard'))
+            return redirect(url_for('routes.about'))
         return render_template('register.html', form=form)
     elif request.method == 'POST':
         # form validation
@@ -45,7 +45,7 @@ def register():
             return render_template('register.html', title="Register", form=form)
 
 def check_password(user_password, password):
-    # check if passsord provided by user is the correct one
+    # check if password provided by user is the correct one
     return bcrypt.check_password_hash(user_password, password)
 
 # logging users in
@@ -54,7 +54,7 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'GET':
         if current_user and current_user.is_authenticated:
-            return redirect(url_for('routes.dashboard'))
+            return redirect(url_for('routes.about'))
         return render_template('login.html', title="Login", form=form)
     else:
         if not form.validate_on_submit():
@@ -69,7 +69,7 @@ def login():
         login_user(user)
         # If the user was in a page before logging in
         next_page = request.args.get('next')
-        return redirect(next_page) if next_page else redirect(url_for('routes.dashboard'))
+        return redirect(next_page) if next_page else redirect(url_for('routes.about'))
 
 # logging users out
 @auth.route("/logout")
@@ -77,13 +77,14 @@ def logout():
     logout_user()
     return redirect(url_for('routes.about'))
 
+# reset password
 @auth.route("/reset", methods=['GET', 'POST'])
 def reset():
     # user requested password reset route
     form = ResetForm(request.form)
     if request.method == 'GET':
         if current_user and current_user.is_authenticated:
-            return redirect(url_for('routes.dashboard'))
+            return redirect(url_for('routes.about'))
         return render_template('reset.html', form=form)
     else:
         user = User.query.filter_by(email=form.email.data).first()
