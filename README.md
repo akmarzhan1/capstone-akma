@@ -99,7 +99,8 @@ If **using Windows**, use 'set' instead of 'export'
 
 Flask-Migrations is an extensions that manages DB migrations, common commands:
 
-flask db migrate (create migration)
-flask db upgrade (implement migration in the DB)
+
+    flask db migrate (create migration)
+    flask db upgrade (implement migration in the DB)
 
 
