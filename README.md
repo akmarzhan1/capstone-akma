@@ -6,7 +6,7 @@ Welcome to my Capstone! You have two options to access this project: through Her
 
 The link to the Heroku website: https://capstone-akma.herokuapp.com/about 
 
-Note that the user information collected before December 10th is not maintained, so you would have to create a new account. Sorry for the inconvenience. You can also use the pre-made user information or create your own account if you want to test the register page:
+Note that the user information collected before February 27th is not maintained, so you would have to create a new account. Sorry for the inconvenience. You can also use the pre-made user information or create your own account if you want to test the register page:
 
 ```{python}
 email: test@user.com
@@ -14,9 +14,14 @@ password: test1234
 ```
 ## Documentation and Helpful Links
 
-Watch this video to familiarize yourself with the app and its features.
+Watch these videos to familiarize yourself with the app and its features.
 
-[![Video tutorial](https://res.cloudinary.com/marcomontalbano/image/upload/v1639153288/video_to_markdown/images/google-drive--1xpgPpe7_YenO-bV89TyrH1irMNF0Gu06-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://drive.google.com/file/d/1xpgPpe7_YenO-bV89TyrH1irMNF0Gu06/view?usp=sharing "Video tutorial")
+#### Prototype 2
+[![Video tutorial](https://user-images.githubusercontent.com/47840436/155910621-8e570c0b-5cb3-461f-aaa4-c3945b030668.png)](https://drive.google.com/file/d/1xpgPpe7_YenO-bV89TyrH1irMNF0Gu06/view?usp=sharing "[v0.2] Video tutorial")
+
+#### Prototype 3
+
+[![Video tutorial](https://user-images.githubusercontent.com/47840436/155910386-d385508b-1007-4421-9950-7ba1a4f613aa.png)](https://drive.google.com/file/d/1MEsSbRu7UOULC_42P9sk8FxwKQ7AL1yY/view?usp=sharing "[v0.3] Video tutorial")
 
 You can also check out the other helpful links in my Notion [here](https://akmarzhan.notion.site/Capstone-5d82dfda87854d789d97c13e08cb5f9e). It has all the documentation and so on. This is the final paper that explains my project. You can find it [here](https://drive.google.com/file/d/1zruBliinuT4rVAPfmo9ndoSyDf-stb1B/view?usp=sharing).
 
@@ -24,9 +29,7 @@ You can also check out the other helpful links in my Notion [here](https://akmar
 
 Some things that are not yet included due to the time limit, but which I am planning to include:
 
-- [x] coins and shop
 - [x] larger game selection 
-- [x] timer analytics
 - [x] Github/Google login
 
 ## Run Virtual Environment
