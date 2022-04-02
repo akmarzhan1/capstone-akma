@@ -25,6 +25,10 @@ def about():
 @routes.route("/timer")
 def timer():
     
+    """
+    Function for taking care of the timer logic. 
+    """
+
     if current_user and current_user.is_authenticated:
 
         #checking game access (depending on the number of completed sessions and minutes)
@@ -42,7 +46,7 @@ def timer():
             if timer.attempted_time == timer.focus_time:
                 completed_timers += 1
 
-        if total_focus>=5 and completed_timers>=2:
+        if total_focus>=5 and completed_timers>=1:
             game1 = True
         else:
             game1 = False 
@@ -53,7 +57,6 @@ def timer():
             game2= False 
 
         game_access = {'game1': game1, 'game2': game2}
-        print(game_access)
 
         return render_template('timer.html', game_access=game_access)
 
@@ -62,6 +65,10 @@ def timer():
 # tasks route
 @routes.route("/tasks")
 def tasks():
+
+    """
+    Function for taking care of the tasks. 
+    """
 
     form = AddToDoForm(request.form)
 
@@ -76,6 +83,11 @@ def tasks():
 #profile route
 @routes.route("/profile")
 def profile():
+
+    """
+    Function for handling the personal profile page. Accesses the information from
+    the database and redirects it to the profile page.
+    """
 
     if current_user and current_user.is_authenticated:
 
@@ -95,6 +107,8 @@ def profile():
             Timer.user_id == current_user.id, Timer.completed == True, Timer.time_created >= today)).all()
         today_tasks = Tasks.query.filter(and_(
             Tasks.user_id == current_user.id, Tasks.doing == False, Tasks.time_created >= today)).all()
+
+        print("len", len(timers))
 
         for timer in timers:
             total_focus += timer.focus_time
@@ -163,6 +177,10 @@ def blank():
 @login_required
 def add_task():
 
+    """
+    Function for adding tasks to the database.
+    """
+
     form = AddToDoForm(request.form)
 
     if form.validate_on_submit():
@@ -188,6 +206,11 @@ def add_task():
 # delete tasks in the bucket
 @routes.route("/delete_all", methods=['POST', 'GET'])
 def delete_all():
+
+    """
+    Function for deleting all of the tasks in the database.  
+    """
+
     tasks = Tasks.query.filter_by(user_id=current_user.id, doing=True)
 
     for task in tasks:
@@ -200,6 +223,11 @@ def delete_all():
 # complete tasks
 @routes.route("/complete/<int:task_id>", methods=['POST', 'GET'])
 def complete(task_id):
+
+    """
+    Function for completing the tasks in the database. 
+    """
+
     task = Tasks.query.get_or_404(task_id)
     task.time_completed = date.today()
     task.doing = False

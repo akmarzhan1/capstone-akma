@@ -20,6 +20,11 @@ def load_user(id):
 # registering users
 @auth.route("/register", methods=['GET', 'POST'])
 def register():
+
+    """
+    Function for taking care of the registration process. 
+    """
+
     form = RegistrationForm(request.form)
     if request.method == 'GET':
         if current_user and current_user.is_authenticated:
@@ -51,6 +56,11 @@ def check_password(user_password, password):
 # logging users in
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
+        
+    """
+    Function for taking care of the login process. 
+    """
+
     form = LoginForm(request.form)
     if request.method == 'GET':
         if current_user and current_user.is_authenticated:
@@ -74,12 +84,23 @@ def login():
 # logging users out
 @auth.route("/logout")
 def logout():
+
+    """
+    Function for taking care of the logout process. 
+    """
+
     logout_user()
     return redirect(url_for('routes.about'))
 
 # reset password
 @auth.route("/reset", methods=['GET', 'POST'])
 def reset():
+
+    """
+    Function for taking care of the resetting password. Not incorporated in the latest 
+    version yet, but has the main functionality.  
+    """
+
     # user requested password reset route
     form = ResetForm(request.form)
     if request.method == 'GET':
@@ -111,6 +132,11 @@ def reset():
 
 @auth.route('/reset/token/<encoded_jwt>', methods=['GET', 'POST'])
 def reset_token(encoded_jwt):
+
+    """
+    Function for taking care of resetting tokens.
+    """
+
     # user sent new password after requesting password reset
     form = ResetPasswordForm(request.form)
     if request.method == 'GET':

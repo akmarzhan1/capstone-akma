@@ -16,6 +16,11 @@
     body {
       font-family: "Inter", sans-serif;
     }
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-left: 5%;
+    }
   </style>
 </head>
 
@@ -29,10 +34,10 @@
       <div class="row">{% include "_alerts.html" %}</div>
 
       <div class="mt-12 flex flex-col items-center">
-        <h1 class="text-2xl xl:text-3xl font-extrabold">Sign In to TimeX</h1>
+        <h1 class="text-2xl xl:text-3xl font-extrabold">Sign In to Timero</h1>
         <div class="w-full flex-1 mt-8">
           <div class="flex flex-col items-center">
-            <button
+            <!-- <button
               class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline"
             >
               <div class="bg-white p-2 rounded-full">
@@ -56,8 +61,8 @@
                 </svg>
               </div>
               <span class="ml-4"> Sign In with Google </span>
-            </button>
-
+            </button> -->
+<!-- 
             <button
               class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5"
             >
@@ -70,16 +75,16 @@
                 </svg>
               </div>
               <span class="ml-4"> Sign In with GitHub </span>
-            </button>
+            </button> -->
           </div>
 
-          <div class="my-12 border-b text-center">
+          <!-- <div class="my-12 border-b text-center">
             <div
               class="leading-none px-2 inline-block text-sm bg-white text-gray-600 tracking-wide font-medium transform translate-y-1/2"
             >
-              Or sign in with e-mail
+              Github/Google support soon
             </div>
-          </div>
+          </div> -->
 
           <div class="mx-auto max-w-xs">
             <form method="POST" action="">
@@ -93,7 +98,7 @@
 
                 <div class="invalid-feedback">
                   {% for error in form.email.errors %}
-                  <span>{{ error }}</span>
+                  <span class="error">{{ error }}</span>
                   {% endfor %}
                 </div>
                 {%else%} {{ form.email(class="w-full px-8 py-4 rounded-lg
@@ -110,7 +115,7 @@
                 placeholder="Password" ) }}
                 <div class="invalid-feedback">
                   {% for error in form.password.errors %}
-                  <span>{{ error }}</span>
+                  <span class="error">{{ error }}</span>
                   {% endfor %}
                 </div>
                 {%else%} {{ form.password(class="w-full px-8 py-4 rounded-lg

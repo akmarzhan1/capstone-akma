@@ -26,7 +26,7 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError(
-                'There is a SuggestMe account associated with that email. Please use another email or log in.')
+                'There is a Timero account associated with that email. Please use another email or log in.')
 
 # login form
 class LoginForm(FlaskForm):

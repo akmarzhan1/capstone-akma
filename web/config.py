@@ -5,7 +5,11 @@ import datetime
 
 
 class Config(object):
-    """Base config, uses staging database server."""
+    
+    """
+    Base config, uses staging database server.
+    """
+
     DEBUG = False
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -20,7 +24,11 @@ class Config(object):
 
 
 class ProductionConfig(Config):
-    """Uses production database server."""
+    
+    """
+    Uses production database server.
+    """
+    
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     SECRET_KEY = os.getenv('SECRET_KEY')
 

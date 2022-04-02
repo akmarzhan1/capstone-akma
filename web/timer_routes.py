@@ -17,9 +17,17 @@ csrf = CSRFProtect()
 #calculating the focus time
 def time_calc(attempted, remaining):
 
-    string = attempted*60-(int(remaining[0])*60+int(remaining[1]))
+    """
+    Function for calculating the total focus time. 
+    """
+
+    try:
+        string = attempted*60-(int(float(remaining[0]))*60+int(float(remaining[1])))
+    except:
+        string = 0
+
     if string<0:
-        string = (attempted+1)*60-(int(remaining[0])*60+int(remaining[1]))
+        string = (attempted+1)*60-(int(float(remaining[0]))*60+int(float(remaining[1])))
 
     return string
 
@@ -27,7 +35,10 @@ def time_calc(attempted, remaining):
 @timer_bp.route("/reset_round", methods=['GET', 'POST'])
 def reset_round():
     
-    # resetting the round and collecting the focus time
+    """
+    Function for resetting the round and collecting the focus time. 
+    """
+        
     timer = Timer.query.filter_by(user_id=current_user.id)[-1]
 
     if timer.completed == False:
@@ -48,6 +59,10 @@ def reset_round():
 @csrf.exempt
 @timer_bp.route("/switch_focus", methods=['GET', 'POST'])
 def switch_focus():
+
+    """
+    Function for switching the time to focus. 
+    """
     
     #switching the deep focus mode
     new_state = request.get_json(force=True)['new_state']
@@ -55,8 +70,6 @@ def switch_focus():
     user = User.query.filter_by(id=current_user.id).first()
     user.block = bool(new_state)
     
-    print(type(new_state), user.block)
-
     db.session.commit()
 
     return redirect(url_for('routes.timer'))
@@ -65,7 +78,9 @@ def switch_focus():
 @timer_bp.route("/finish_timer", methods=['GET', 'POST'])
 def finish_timer():
     
-    #finish timer and collect progress
+    """
+    Function for finishing the timer and collecting the total focus time. 
+    """
 
     try:
         timer = Timer.query.filter_by(user_id=current_user.id)[-1]
@@ -84,7 +99,6 @@ def finish_timer():
             if time_remaining=='completed':
                 timer.focus_time = timer.attempted_time
             else:
-                print(time_remaining)
                 timer.focus_time = time_calc(timer.attempted_time, time_remaining)
                 
             timer.completed = True
@@ -97,7 +111,9 @@ def finish_timer():
 @timer_bp.route("/update_timer", methods=['GET', 'POST'])
 def update_timer():
 
-    #update or create timer whenever necessary
+    """
+    Function for creating or updating a timer whenever necessary.
+    """
     
     time_remaining = request.get_json(force=True)['time_remaining'].split(':')
 
