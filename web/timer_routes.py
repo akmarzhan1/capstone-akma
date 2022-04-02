@@ -88,6 +88,7 @@ def finish_timer():
         return {}
 
     time_remaining = request.get_json(force=True)['time_remaining']
+    print('yo', time_remaining)
 
     if timer.completed==False:
 
@@ -96,8 +97,9 @@ def finish_timer():
             db.session.commit()
 
         else:
-            if time_remaining=='completed':
+            if time_remaining=='completed' or time_remaining=="00:00":
                 timer.focus_time = timer.attempted_time
+                print('hello', time_remaining)
             else:
                 timer.focus_time = time_calc(timer.attempted_time, time_remaining)
                 

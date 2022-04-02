@@ -8,6 +8,7 @@ from flask_admin.form import DateTimePickerWidget
 
 # registration form
 class RegistrationForm(FlaskForm):
+
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=15)])
     email = StringField('Email address', validators=[DataRequired(), Email(), Length(min=6, max=35)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=200)])
