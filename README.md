@@ -1,6 +1,8 @@
-# Welcome to the Content Suggestion tool
+# Welcome to Timero
 
-Welcome to my Capstone! You have two options to access this project: through Heroku and by manually downloading and running locally. 
+Welcome to my Capstone! It is a time management app that allows users to keep track of the tasks, set adjustable timers, play games in the breaks and see daily and monthly progress. The project mainly uses Flask, the database operations are implemented through the use of SQLAlchemy on PostgreSQL with the use of REST API for accessing the database across JavaScript and Flask, the front-end uses multiple CSS and HTML frameworks like Bootstrap, Tailwind, Jinja2 for better experience, while the visualizations are made using Chart.js. There are multiple other technologies used (e.g., WTForms). 
+
+You have two options to access this project: through Heroku and by manually downloading and running locally. 
 
 ## Heroku Deployment
 
@@ -25,16 +27,9 @@ Watch these videos to familiarize yourself with the app and its features.
 
 You can also check out the other helpful links in my Notion [here](https://akmarzhan.notion.site/Capstone-5d82dfda87854d789d97c13e08cb5f9e). It has all the documentation and so on. This is the final paper that explains my project. You can find it [here](https://drive.google.com/file/d/1zruBliinuT4rVAPfmo9ndoSyDf-stb1B/view?usp=sharing).
 
-## IMPORTANT NOTICE
-
-Some things that are not yet included due to the time limit, but which I am planning to include:
-
-- [x] larger game selection 
-- [x] Github/Google login
-
 ## Run Virtual Environment
 
-Virtual environment is a key component in ensuring that the application is configured in the right environment
+Virtual environment is a key component in ensuring that the application is configured in the right environment. To run this project on your computer, make sure you follow the next steps:
 
 ##### Requirements
 * Python 3
